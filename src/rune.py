@@ -1,8 +1,13 @@
+import logging
+
 __author__ = 'CGT'
+
+logger = logging.getLogger(__name__)
 
 class Rune(object):
 
     def __init__(self,data_list=None):
+        logger.debug('Initialize rune, id = %s',data_list[0])
         self.id = data_list[0]
         self.equipped = data_list[1]
         self.rune_set = data_list[2]
@@ -20,4 +25,4 @@ class Rune(object):
         self.max_efficiency = data_list[14]
 
     def process(self):
-        pass
+        logger.debug('Processing rune id=%s',self.id)
