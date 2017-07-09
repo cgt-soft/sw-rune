@@ -1,4 +1,5 @@
 import logging
+import src.settings as st
 
 __author__ = 'CGT'
 
@@ -37,10 +38,11 @@ class Rune(object):
         self.grinded = False
         self.atk_sum = 0
         self.sup_sum = 0
+        self.sell = False
 
     def process(self):
         logger.debug('Processing rune id=%s', self.id)
-        if self.slot in [2, 4, 6]:
+        if self.slot in st.PERC_SLOTS:
             subs_to_check = [self.main_stat, self.sub_fixed, self.sub_1, self.sub_2, self.sub_3, self.sub_4]
         else:
             subs_to_check = [self.sub_fixed, self.sub_1, self.sub_2, self.sub_3, self.sub_4]
@@ -81,6 +83,33 @@ class Rune(object):
                         logger.debug('No PERC or SPD in substat: %s', substat)
                 if '->' in splitted[-2]:
                     self.grinded = True
-        # TODO add weights and set effect
-        self.atk_sum = self.atk + self.cr + self.cd + self.spd + self.res + self.acc
-        self.sup_sum = self.hp + self.df + self.spd + self.res + self.acc
+        self.atk_sum =  st.SUB_WEIGHTS['ATK']*self.atk + \
+                        st.SUB_WEIGHTS['CR'] *self.cr + \
+                        st.SUB_WEIGHTS['CD'] *self.cd + \
+                        st.SUB_WEIGHTS['SPD'] *self.spd + \
+                        st.SUB_WEIGHTS['RES'] *self.res + \
+                        st.SUB_WEIGHTS['ACC'] *self.acc
+        self.sup_sum =  st.SUB_WEIGHTS['HP']*self.hp + \
+                        st.SUB_WEIGHTS['DEF'] *self.df + \
+                        st.SUB_WEIGHTS['SPD'] * self.spd + \
+                        st.SUB_WEIGHTS['RES'] * self.res + \
+                        st.SUB_WEIGHTS['ACC'] * self.acc
+        logger.debug('PROCESSED RUNE \n ID  SUP_SUM ATK_SUM \n %s %s %s', self.id, self.sup_sum, self.atk_sum)
+
+    def check_to_sell(self, averages):
+        if self.slot in st.PERC_SLOTS:
+            slot_type = 'PERC'
+        else:
+            slot_type = 'FLAT'
+        if self.level >= 12:
+            if self.atk_sum > averages[self.rune_set]['ATK'][slot_type] \
+                    or self.sup_sum > averages[self.rune_set]['SUP'][slot_type] \
+                    or self.spd > averages[self.rune_set]['SPD']:
+                logger.debug('RUNE TO KEEP id: %s \n %s\n',self.id,
+                             [self.main_stat,self.sub_fixed, self.sub_1, self.sub_2, self.sub_3, self.sub_4])
+            else:
+                logger.debug('RUNE TO SELL id: %s \n %s\n', self.id,
+                             [self.main_stat, self.sub_fixed, self.sub_1, self.sub_2, self.sub_3, self.sub_4])
+                self.sell = True
+        else:
+            pass
