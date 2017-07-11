@@ -49,11 +49,11 @@ class RuneDatabase(object):
                 rune.spd > 0 and rune.rune_set == rune_set and rune.level >= 12 and rune.slot not in st.SPD_SLOT)]
             logger.debug('length spd list = %s \n %s\n', len(spd_list),[[rune.id, rune.spd] for rune in spd_list])
 
-            av_atk_perc = numpy.mean([rune.atk_sum for rune in perc_list])
-            av_atk_flat = numpy.mean([rune.atk_sum for rune in flat_list])
-            av_sup_perc = numpy.mean([rune.sup_sum for rune in perc_list])
-            av_sup_flat = numpy.mean([rune.sup_sum for rune in flat_list])
-            av_spd = numpy.mean([rune.spd for rune in spd_list])
+            av_atk_perc = numpy.median([rune.atk_sum for rune in perc_list])
+            av_atk_flat = numpy.median([rune.atk_sum for rune in flat_list])
+            av_sup_perc = numpy.median([rune.sup_sum for rune in perc_list])
+            av_sup_flat = numpy.median([rune.sup_sum for rune in flat_list])
+            av_spd = numpy.median([rune.spd for rune in spd_list])
 
             logger.debug('\nav_atk_perc, av_atk_flat, av_sup_perc, av_sup_flat, av_spd\n %s %s %s %s %s',
                          av_atk_perc, av_atk_flat, av_sup_perc, av_sup_flat, av_spd)

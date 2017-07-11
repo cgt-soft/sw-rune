@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import src.settings as st
 import collections
+import numpy
+
 __author__ = 'CGT'
 
 
@@ -16,8 +18,8 @@ class Plots(object):
         n_bins = 5
         colors = ['red', 'tan', 'lime', 'cyan', 'yellow',
                   'orange', 'blue', 'pink', 'green', 'navy',
-                  'maroon', 'teal', 'silver', 'purple', 'aqua', 'olive']
-        plt.hist(x, n_bins, normed=1, histtype='bar', color=colors, label=st.RUNE_SETS)
+                  'maroon', 'teal', 'silver', 'purple', 'steelblue', 'olive']
+        plt.hist(x, n_bins, histtype='bar', color=colors, label=st.RUNE_SETS)
         plt.legend(prop={'size': 10})
         plt.show()
 
@@ -30,5 +32,9 @@ class Plots(object):
         plt.axis('equal')
         plt.show()
 
-    def efficiency_histogram(self):
-        pass
+    def efficiency_histogram(self, rune_set):
+        runes = [rune for rune in self.data if rune.rune_set == rune_set]
+        x = [[rune.atk_sum for rune in runes if rune.slot in st.PERC_SLOTS]]
+        plt.hist(x, normed = True, bins= range(int(numpy.amin(x)), int(numpy.amax(x)), 10))
+        plt.legend(prop={'size': 10})
+        plt.show()

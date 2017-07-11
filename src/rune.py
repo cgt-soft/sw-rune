@@ -101,15 +101,15 @@ class Rune(object):
             slot_type = 'PERC'
         else:
             slot_type = 'FLAT'
-        if self.level >= 12:
-            if self.atk_sum > averages[self.rune_set]['ATK'][slot_type] \
-                    or self.sup_sum > averages[self.rune_set]['SUP'][slot_type] \
-                    or self.spd > averages[self.rune_set]['SPD']:
-                logger.debug('RUNE TO KEEP id: %s \n %s\n',self.id,
-                             [self.main_stat,self.sub_fixed, self.sub_1, self.sub_2, self.sub_3, self.sub_4])
-            else:
-                logger.debug('RUNE TO SELL id: %s \n %s\n', self.id,
-                             [self.main_stat, self.sub_fixed, self.sub_1, self.sub_2, self.sub_3, self.sub_4])
-                self.sell = True
+        n_upgrades = int((15 - self.level) / 3)
+        if n_upgrades > 0: n_upgrades -= 1
+        if self.atk_sum + st.SUB_INCREMENT[slot_type]*n_upgrades > averages[self.rune_set]['ATK'][slot_type] \
+                or self.sup_sum + st.SUB_INCREMENT[slot_type]*n_upgrades > averages[self.rune_set]['SUP'][slot_type] \
+                or self.spd + st.SUB_INCREMENT[slot_type]*n_upgrades > averages[self.rune_set]['SPD']:
+            logger.debug('RUNE TO KEEP id: %s \n %s\n',self.id,
+                         [self.main_stat,self.sub_fixed, self.sub_1, self.sub_2, self.sub_3, self.sub_4])
         else:
-            pass
+            logger.debug('RUNE TO SELL id: %s \n %s\n', self.id,
+                         [self.main_stat, self.sub_fixed, self.sub_1, self.sub_2, self.sub_3, self.sub_4])
+            self.sell = True
+
