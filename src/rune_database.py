@@ -31,36 +31,36 @@ class RuneDatabase(object):
             self.rune_objects.append(rune)
 
     def statistics(self):
-        for rune_set in st.RUNE_SETS:
-            logger.debug('\n\n*****STATISTICS for set %s\n', rune_set)
-            perc_list = [rune for rune in self.rune_objects if (
-                rune.rune_set == rune_set and rune.level >= 12 and rune.slot in st.PERC_SLOTS)]
+        perc_list = [rune for rune in self.rune_objects if (rune.level >= 12 and rune.slot in st.PERC_SLOTS)]
 
-            logger.debug('length perc list = %s \n %s\n', len(perc_list),
-                         [[rune.id, rune.sup_sum, rune.atk_sum] for rune in perc_list])
+        # logger.debug('length perc list = %s \n %s\n', len(perc_list),
+        #              [[rune.id, rune.sup_sum, rune.atk_sum] for rune in perc_list])
 
-            flat_list = [rune for rune in self.rune_objects if (
-                rune.rune_set == rune_set and rune.level >= 12 and rune.slot in st.FLAT_SLOTS)]
+        flat_list = [rune for rune in self.rune_objects if (rune.level >= 12 and rune.slot in st.FLAT_SLOTS)]
 
-            logger.debug('length flat list = %s \n %s\n', len(flat_list),
-                         [[rune.id, rune.sup_sum, rune.atk_sum] for rune in flat_list])
+        # logger.debug('length flat list = %s \n %s\n', len(flat_list),
+        #              [[rune.id, rune.sup_sum, rune.atk_sum] for rune in flat_list])
 
-            spd_list = [rune for rune in self.rune_objects if (
-                rune.spd > 0 and rune.rune_set == rune_set and rune.level >= 12 and rune.slot not in st.SPD_SLOT)]
-            logger.debug('length spd list = %s \n %s\n', len(spd_list),[[rune.id, rune.spd] for rune in spd_list])
+        spd_list = [rune for rune in self.rune_objects if (rune.stats['SPD'] > 0 and rune.level >= 12 and
+                                                           rune.slot not in st.SPD_SLOT)]
+        # logger.debug('length spd list = %s \n %s\n', len(spd_list),[[rune.id, rune.spd] for rune in spd_list])
 
-            av_atk_perc = numpy.median([rune.atk_sum for rune in perc_list])
-            av_atk_flat = numpy.median([rune.atk_sum for rune in flat_list])
-            av_sup_perc = numpy.median([rune.sup_sum for rune in perc_list])
-            av_sup_flat = numpy.median([rune.sup_sum for rune in flat_list])
-            av_spd = numpy.median([rune.spd for rune in spd_list])
+        # av_atk_perc = numpy.median([rune.atk_sum for rune in perc_list])
+        # av_atk_flat = numpy.median([rune.atk_sum for rune in flat_list])
+        # av_sup_perc = numpy.median([rune.sup_sum for rune in perc_list])
+        # av_sup_flat = numpy.median([rune.sup_sum for rune in flat_list])
+        # av_spd = numpy.median([rune.spd for rune in spd_list])
 
-            logger.debug('\nav_atk_perc, av_atk_flat, av_sup_perc, av_sup_flat, av_spd\n %s %s %s %s %s',
-                         av_atk_perc, av_atk_flat, av_sup_perc, av_sup_flat, av_spd)
+        for rune_type in st.TYPES.keys():
+            av_perc = numpy.median([rune.sums[rune_type] for rune in perc_list if rune.sums[rune_type] > 0])
+            av_flat = numpy.median([rune.sums[rune_type] for rune in flat_list if rune.sums[rune_type] > 0])
+            self.stat_averages[rune_type] = {'PERC': av_perc, 'FLAT': av_flat}
 
-            self.stat_averages[rune_set] = {'ATK' : {'PERC' : av_atk_perc, 'FLAT': av_atk_flat},
-                                            'SUP' : {'PERC' : av_sup_perc, 'FLAT': av_sup_flat},
-                                            'SPD' : av_spd}
+        av_spd = numpy.median([rune.stats['SPD'] for rune in spd_list])
+        self.stat_averages['SPD'] = av_spd
+
+        logger.debug('STATISTICS DONE')
+        logger.debug(self.stat_averages)
 
     def check_to_sell(self):
         for rune in self.rune_objects:
