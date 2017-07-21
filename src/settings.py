@@ -6,6 +6,7 @@ RUNE_SETS = ['Energy', 'Swift', 'Blade', 'Fatal', 'Despair',
 PERC_SLOTS = [2,4,6]
 FLAT_SLOTS = [1,3,5]
 SPD_SLOT = [2]
+AV_BASE_STATS = {'HP' : 9900, 'DEF' : 580, 'ATK' : 690, 'SPD' : 102}
 SUB_WEIGHTS = {'HP' : 1, 'DEF' : 1, 'SPD' : 1.2,
                'CR' : 1.8, 'CD' : 1.8, 'ATK': 1,
                'RES' : 0.6, 'ACC' : 0.6}
