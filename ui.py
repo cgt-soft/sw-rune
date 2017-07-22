@@ -60,7 +60,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             filtered_runes = [rune for rune in filtered_runes if not rune.sell]
         #TODO mainstat filter
         self.statusBar().showMessage('{} runes filtered'.format(len(filtered_runes)))
-        self.runeListWidget.clear()
+        self.runeTableWidget.setRowCount(0)
         self.populate_list(filtered_runes)
 
     def open_csv(self):
@@ -81,18 +81,29 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.populate_list(self.rune_database.rune_objects)
 
     def populate_list(self, rune_list):
+        rune_id = 0
         for rune in rune_list:
-            tag = '{}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(rune.id, rune.equipped, rune.slot,
-                                                                  rune.rune_set, rune.level, rune.main_stat,
-                                                                  rune.sub_fixed, rune.subs, rune.mons_type,
-                                                                  rune.sums[rune.mons_type])
-            item = QtWidgets.QListWidgetItem()
-            item.setText(tag)
-            if rune.sell:
-                item.setBackground(QtGui.QColor(200, 0, 0))
-            else:
-                item.setBackground(QtGui.QColor(0, 200, 0))
-            self.runeListWidget.addItem(item)
+            # tag = '{}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(rune.id, rune.equipped, rune.slot,
+            #                                                       rune.rune_set, rune.level, rune.main_stat,
+            #                                                       rune.sub_fixed, rune.subs, rune.mons_type,
+            #                                                       rune.sums[rune.mons_type])
+            # item = QtWidgets.QListWidgetItem()
+            # item.setText(tag)
+            data = [rune.equipped, rune.slot, rune.rune_set, rune.level, rune.main_stat,
+                    rune.sub_fixed, rune.subs, rune.mons_type, rune.sums[rune.mons_type]]
+            position = self.runeTableWidget.rowCount()
+            print(position)
+            self.runeTableWidget.insertRow(position)
+            for index, d in enumerate(data):
+                item = QtWidgets.QTableWidgetItem()
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                item.setText(str(d))
+                if rune.sell:
+                    item.setBackground(QtGui.QColor(200, 0, 0))
+                else:
+                    item.setBackground(QtGui.QColor(0, 200, 0))
+                self.runeTableWidget.setItem(position, index, item)
+        self.runeTableWidget.resizeColumnsToContents()
 
     def closeEvent(self, event):
         reply = QtWidgets.QMessageBox.question(self, 'Message',
