@@ -3,8 +3,8 @@ RUNE_SETS = ['Energy', 'Swift', 'Blade', 'Fatal', 'Despair',
              'Violent', 'Focus', 'Guard', 'Endure', 'Shield', 'Revenge',
              'Rage', 'Will', 'Nemesis', 'Vampire', 'Destroy',
              '???']
-PERC_SLOTS = [2,4,6]
-FLAT_SLOTS = [1,3,5]
+PERC_SLOTS = [2, 4, 6]
+FLAT_SLOTS = [1, 3, 5]
 SPD_SLOT = [2]
 AV_BASE_STATS = {'HP' : 9900, 'DEF' : 580, 'ATK' : 690, 'SPD' : 102}
 SUB_WEIGHTS = {'HP' : 1, 'DEF' : 1, 'SPD' : 1.2,
@@ -32,7 +32,8 @@ TYPES = {   'TNK': {    'SETS' : ['Energy', 'Guard', 'Endure', 'Shield', 'Reveng
             'SDD': {    'SETS' : ['Violent', 'Fatal', 'Rage', 'Will', 'Blade', 'Will', 'Nemesis', 'Vampire',
                                   'Destroy', '???'],
                         'SUBS' : ['ATK', 'CR', 'CD', 'SPD']},
-            'ADD': {    'SETS' : ['Violent', 'Blade', 'Will', 'Nemesis', 'Vampire', 'Destroy', 'Revenge', '???'],
+            'ADD': {    'SETS' : ['Violent', 'Blade', 'Will', 'Nemesis', 'Vampire', 'Destroy', 'Revenge',
+                                  'Focus', '???'],
                         'SUBS' : ['ATK', 'CR', 'CD', 'ACC']},
             'RDD': {    'SETS' : ['Violent', 'Fatal', 'Rage', 'Vampire', 'Blade', 'Will', 'Nemesis',
                                   'Revenge', 'Destroy', '???'],

@@ -1,14 +1,28 @@
 import sys
 from ui.main_window import Ui_MainWindow
+from ui.about import Ui_aboutDialog
 from PyQt5 import QtCore, QtGui, QtWidgets
 from src.rune_database import RuneDatabase
 import src.settings as st
 import logging
+import pickle
 
 __author__ = 'CGT'
 
 logger = logging.getLogger(__name__)
 
+
+class AboutDialog(QtWidgets.QDialog, Ui_aboutDialog):
+    def __init__(self):
+        QtWidgets.QDialog.__init__(self)
+        Ui_aboutDialog.__init__(self)
+        self.setupUi(self)
+        flags = QtCore.Qt.Drawer | QtCore.Qt.WindowStaysOnTopHint
+        self.setWindowFlags(flags)
+        self.closeAbout.clicked.connect(self.close_about_window)
+
+    def close_about_window(self):
+        self.close()
 
 class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -16,12 +30,30 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
         self.rune_database = RuneDatabase()
+        self.about_window = AboutDialog()
         self.set_connections()
+        self.load_from_pickle()
+
+    def load_from_pickle(self):
+        try:
+            with open('data.pk', 'rb') as f:
+                self.rune_database.rune_objects = pickle.load(f)
+            self.populate_list(self.rune_database.rune_objects)
+        except:
+            pass
+
+    def save_to_pickle(self):
+        with open('data.pk','wb') as f:
+            pickle.dump(self.rune_database.rune_objects, f)
 
     def set_connections(self):
         self.actionQuit.triggered.connect(self.close)
         self.actionOpen.triggered.connect(self.open_csv)
         self.filtersButton.clicked.connect(self.apply_filters)
+        self.actionAbout.triggered.connect(self.open_about_dialog)
+
+    def open_about_dialog(self):
+        self.about_window.show()
 
     def apply_filters(self):
         if self.setComboBox.currentText() == 'All':
@@ -40,7 +72,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             stars_filter = [x for x in range(1,7)]
         else:
             stars_filter = [int(self.starsComboBox.currentText())]
-        print(stars_filter)
         filtered_runes = [rune for rune in self.rune_database.rune_objects
                           if rune.rune_set in set_filter and rune.slot in slot_filter
                           and rune.stars in stars_filter
@@ -71,7 +102,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                                                              "Comma Separated Values file(*.csv);;All Files (*)",
                                                              options=options)
         if file_name:
-            print(file_name)
             self.statusBar().showMessage('reading file {}'.format(file_name))
             self.rune_database.read_from_csv(file_name)
             self.statusBar().showMessage('{} runes read'.format(str(len(self.rune_database.rune_list))))
@@ -92,7 +122,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             data = [rune.equipped, rune.slot, rune.rune_set, rune.level, rune.main_stat,
                     rune.sub_fixed, rune.subs, rune.mons_type, rune.sums[rune.mons_type]]
             position = self.runeTableWidget.rowCount()
-            print(position)
             self.runeTableWidget.insertRow(position)
             for index, d in enumerate(data):
                 item = QtWidgets.QTableWidgetItem()
@@ -111,6 +140,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                                                QtWidgets.QMessageBox.No, QtWidgets.QMessageBox.No)
 
         if reply == QtWidgets.QMessageBox.Yes:
+            self.save_to_pickle()
             event.accept()
         else:
             event.ignore()
