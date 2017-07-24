@@ -1,6 +1,7 @@
 import sys
 from ui.main_window import Ui_MainWindow
 from ui.about import Ui_aboutDialog
+from ui.prefrences import Ui_preferencesDialog
 from PyQt5 import QtCore, QtGui, QtWidgets
 from src.rune_database import RuneDatabase
 import src.settings as st
@@ -11,6 +12,18 @@ __author__ = 'CGT'
 
 logger = logging.getLogger(__name__)
 
+
+class PreferencesDialog(QtWidgets.QDialog, Ui_preferencesDialog):
+    def __init__(self):
+        QtWidgets.QDialog.__init__(self)
+        Ui_preferencesDialog.__init__(self)
+        self.setupUi(self)
+        flags = QtCore.Qt.Drawer | QtCore.Qt.WindowStaysOnTopHint
+        self.setWindowFlags(flags)
+        self.cancelButton.clicked.connect(self.close_preferences_window)
+
+    def close_preferences_window(self):
+        self.close()
 
 class AboutDialog(QtWidgets.QDialog, Ui_aboutDialog):
     def __init__(self):
@@ -31,8 +44,19 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.rune_database = RuneDatabase()
         self.about_window = AboutDialog()
+        self.preferences_window = PreferencesDialog()
         self.set_connections()
         self.load_from_pickle()
+
+    def set_connections(self):
+        self.actionQuit.triggered.connect(self.close)
+        self.actionOpen.triggered.connect(self.open_csv)
+        self.filtersButton.clicked.connect(self.apply_filters)
+        self.actionAbout.triggered.connect(self.open_about_dialog)
+        self.actionPreferences.triggered.connect(self.open_preferences_dialog)
+
+    def open_preferences_dialog(self):
+        self.preferences_window.show()
 
     def load_from_pickle(self):
         try:
@@ -45,12 +69,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def save_to_pickle(self):
         with open('data.pk','wb') as f:
             pickle.dump(self.rune_database.rune_objects, f)
-
-    def set_connections(self):
-        self.actionQuit.triggered.connect(self.close)
-        self.actionOpen.triggered.connect(self.open_csv)
-        self.filtersButton.clicked.connect(self.apply_filters)
-        self.actionAbout.triggered.connect(self.open_about_dialog)
 
     def open_about_dialog(self):
         self.about_window.show()
@@ -89,7 +107,10 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             filtered_runes = [rune for rune in filtered_runes if rune.sell]
         else:
             filtered_runes = [rune for rune in filtered_runes if not rune.sell]
-        #TODO mainstat filter
+        if self.mainstatComboBox.currentText() == 'All':
+            pass
+        else:
+            filtered_runes = [rune for rune in filtered_runes if self.mainstatComboBox.currentText() in rune.main_stat]
         self.statusBar().showMessage('{} runes filtered'.format(len(filtered_runes)))
         self.runeTableWidget.setRowCount(0)
         self.populate_list(filtered_runes)
@@ -120,7 +141,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             # item = QtWidgets.QListWidgetItem()
             # item.setText(tag)
             data = [rune.equipped, rune.slot, rune.rune_set, rune.level, rune.main_stat,
-                    rune.sub_fixed, rune.subs, rune.mons_type, rune.sums[rune.mons_type]]
+                    rune.sub_fixed, rune.subs, rune.mons_type, float(round(rune.sums[rune.mons_type], 2))]
             position = self.runeTableWidget.rowCount()
             self.runeTableWidget.insertRow(position)
             for index, d in enumerate(data):
