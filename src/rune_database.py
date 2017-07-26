@@ -10,9 +10,10 @@ __author__ = 'CGT'
 
 logger = logging.getLogger(__name__)
 
-settings = ps.load_settings('Custom')
 
 class RuneDatabase(object):
+
+    settings = ps.load_settings('Custom')
 
     def __init__(self):
         self.rune_list = []
@@ -48,6 +49,7 @@ class RuneDatabase(object):
             rune.process()
 
     def statistics(self):
+        self.settings = ps.load_settings('Custom')
         perc_list = [rune for rune in self.rune_objects if (rune.level >= 12 and rune.slot in st.PERC_SLOTS)]
 
         # logger.debug('length perc list = %s \n %s\n', len(perc_list),
@@ -68,7 +70,8 @@ class RuneDatabase(object):
         # av_sup_flat = numpy.median([rune.sup_sum for rune in flat_list])
         # av_spd = numpy.median([rune.spd for rune in spd_list])
 
-        for rune_type in st.TYPES.keys():
+        # for rune_type in st.TYPES.keys():
+        for rune_type in self.settings['MONS_TYPES'].keys():
             av_perc = numpy.median([rune.sums[rune_type] for rune in perc_list if rune.sums[rune_type] > 0])
             av_flat = numpy.median([rune.sums[rune_type] for rune in flat_list if rune.sums[rune_type] > 0])
             self.stat_averages[rune_type] = {'PERC': av_perc, 'FLAT': av_flat}

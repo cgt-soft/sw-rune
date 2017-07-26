@@ -35,18 +35,19 @@ class Rune(object):
             self.max_efficiency = data_list[14]
         # self.stats = {'HP' : 0, 'CR' : 0, 'CD' : 0, 'ATK' : 0, 'ACC': 0, 'RES' : 0, 'SPD': 0, 'DEF': 0}
         # self.stats = {key: 0 for key in st.SUB_WEIGHTS.keys()}
-        self.stats = {key: 0 for key in self.settings.keys()}
+        self.stats = {key: 0 for key in self.settings['SUB_WEIGHTS'].keys()}
         self.grinded = False
-        self.sums = {key: 0 for key in st.TYPES.keys()}
+        # self.sums = {key: 0 for key in st.TYPES.keys()}
+        self.sums = {key: 0 for key in self.settings['MONS_TYPES'].keys()}
         self.sell = True
         self.n_subs = len([sub for sub in self.subs if sub])
         self.mons_type = None
 
     def process(self):
         logger.debug('Processing rune id=%s', self.id)
-        # print(self.settings)
-        self.stats = {key: 0 for key in self.settings.keys()}
-        self.sums = {key: 0 for key in st.TYPES.keys()}
+        self.stats = {key: 0 for key in self.settings['SUB_WEIGHTS'].keys()}
+        # self.sums = {key: 0 for key in st.TYPES.keys()}
+        self.sums = {key: 0 for key in self.settings['MONS_TYPES'].keys()}
         self.sell = True
         self.grinded = False
         if self.slot in st.PERC_SLOTS:
@@ -110,17 +111,20 @@ class Rune(object):
         #                 st.SUB_WEIGHTS['RES'] * self.res + \
         #                 st.SUB_WEIGHTS['ACC'] * self.acc
         # logger.debug('PROCESSED RUNE \n ID  SUP_SUM ATK_SUM \n %s %s %s', self.id, self.sup_sum, self.atk_sum)
-        for rune_type in st.TYPES.keys():
+        # for rune_type in st.TYPES.keys():
+        for rune_type in self.settings['MONS_TYPES'].keys():
             for stat in self.stats.keys():
-                if stat in st.TYPES[rune_type]['SUBS'] and self.rune_set in st.TYPES[rune_type]['SETS']:
-                    self.sums[rune_type] += self.settings[stat] * self.stats[stat]
+                # if stat in st.TYPES[rune_type]['SUBS'] and self.rune_set in st.TYPES[rune_type]['SETS']:
+                if stat in self.settings['MONS_TYPES'][rune_type]['SUBS'] \
+                        and self.rune_set in self.settings['MONS_TYPES'][rune_type]['SETS']:
+                    self.sums[rune_type] += self.settings['SUB_WEIGHTS'][stat] * self.stats[stat]
                     # self.sums[rune_type] += self.settings[stat] * self.stats[stat]
         logger.debug('PROCESSED RUNE ID %s, set %s', self.id, self.rune_set)
         logger.debug(self.stats)
         logger.debug(self.sums)
         self.mons_type = max(self.sums, key= self.sums.get)
         logger.debug(self.mons_type)
-        print(self.id, self.sums)
+        # print(self.id, self.sums)
 
     def check_to_sell(self, averages):
         n_upgrades = int((15 - self.level) / 3)
@@ -130,7 +134,8 @@ class Rune(object):
             slot_type = 'PERC'
         else:
             slot_type = 'FLAT'
-        for rune_type in st.TYPES.keys():
+        # for rune_type in st.TYPES.keys():
+        for rune_type in self.settings['MONS_TYPES'].keys():
             if self.sums[rune_type] + st.SUB_INCREMENT[slot_type]*n_upgrades > averages[rune_type][slot_type]:
                 self.sell = False
 

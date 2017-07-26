@@ -59,6 +59,7 @@ TYPES = {   'TNK': {    'SETS' : ['Energy', 'Guard', 'Endure', 'Shield', 'Reveng
 }
 
 if __name__ == '__main__':
-    settings = {'Default': SUB_WEIGHTS}
+    settings = {'Default': {'SUB_WEIGHTS': SUB_WEIGHTS, 'RUNE_SETS' : RUNE_SETS, 'MONS_TYPES': TYPES}}
+    print(settings)
     with open('settings.pk','wb') as f:
         pickle.dump(settings, f)

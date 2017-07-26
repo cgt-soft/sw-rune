@@ -8,6 +8,7 @@ import src.settings as st
 import src.pickle_settings as ps
 import logging
 import pickle
+import json
 
 __author__ = 'CGT'
 
@@ -27,6 +28,7 @@ def my_exception_hook(exctype, value, traceback):
 # Set the exception hook to our wrapping function
 sys.excepthook = my_exception_hook
 
+
 class PreferencesDialog(QtWidgets.QDialog, Ui_preferencesDialog):
     def __init__(self):
         QtWidgets.QDialog.__init__(self)
@@ -38,25 +40,36 @@ class PreferencesDialog(QtWidgets.QDialog, Ui_preferencesDialog):
         self.buttonBox.button(QtWidgets.QDialogButtonBox.Cancel).clicked.connect(self.close_preferences_window)
         self.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).clicked.connect(self.close_preferences_window)
         self.buttonBox.button(QtWidgets.QDialogButtonBox.RestoreDefaults).clicked.connect(self.restore_default)
+        self.addsetButton.clicked.connect(self.add_set)
+        self.removesetButton.clicked.connect(self.remove_set)
         self.restore_settings('Custom')
+
+    def remove_set(self):
+        for item in self.setslistWidget.selectedItems():
+            self.setslistWidget.takeItem(self.setslistWidget.row(item))
+
+    def add_set(self):
+        self.setslistWidget.addItem(self.setEdit.text())
 
     def restore_settings(self, key='Default'):
         self.settings = ps.load_settings(key=key)
-        self.hp_doubleSpinBox.setValue(self.settings['HP'])
-        self.def_doubleSpinBox.setValue(self.settings['DEF'])
-        self.spd_doubleSpinBox.setValue(self.settings['SPD'])
-        self.cr_doubleSpinBox.setValue(self.settings['CR'])
-        self.cd_doubleSpinBox.setValue(self.settings['CD'])
-        self.atk_doubleSpinBox.setValue(self.settings['ATK'])
-        self.res_doubleSpinBox.setValue(self.settings['RES'])
-        self.acc_doubleSpinBox.setValue(self.settings['ACC'])
-        logger.debug('restore_settnigs')
-        logger.debug(self.settings)
+        self.hp_doubleSpinBox.setValue(self.settings['SUB_WEIGHTS']['HP'])
+        self.def_doubleSpinBox.setValue(self.settings['SUB_WEIGHTS']['DEF'])
+        self.spd_doubleSpinBox.setValue(self.settings['SUB_WEIGHTS']['SPD'])
+        self.cr_doubleSpinBox.setValue(self.settings['SUB_WEIGHTS']['CR'])
+        self.cd_doubleSpinBox.setValue(self.settings['SUB_WEIGHTS']['CD'])
+        self.atk_doubleSpinBox.setValue(self.settings['SUB_WEIGHTS']['ATK'])
+        self.res_doubleSpinBox.setValue(self.settings['SUB_WEIGHTS']['RES'])
+        self.acc_doubleSpinBox.setValue(self.settings['SUB_WEIGHTS']['ACC'])
+        self.setslistWidget.clear()
+        for item in self.settings['RUNE_SETS']:
+            self.setslistWidget.addItem(item)
+        txt = json.dumps(self.settings['MONS_TYPES'], sort_keys=True, indent=4)
+        self.textEdit.clear()
+        self.textEdit.insertPlainText(txt)
 
     def restore_default(self):
         self.restore_settings()
-
-
 
     def close_preferences_window(self):
         self.close()
@@ -98,15 +111,22 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.preferences_window.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.apply_preferences)
 
     def apply_preferences(self):
-        self.settings['HP'] = self.preferences_window.hp_doubleSpinBox.value()
-        self.settings['DEF'] = self.preferences_window.def_doubleSpinBox.value()
-        self.settings['SPD'] = self.preferences_window.spd_doubleSpinBox.value()
-        self.settings['CR'] = self.preferences_window.cr_doubleSpinBox.value()
-        self.settings['CD'] = self.preferences_window.cd_doubleSpinBox.value()
-        self.settings['ATK'] = self.preferences_window.atk_doubleSpinBox.value()
-        self.settings['RES'] = self.preferences_window.res_doubleSpinBox.value()
-        self.settings['ACC'] = self.preferences_window.acc_doubleSpinBox.value()
-        logger.debug('Aplying Settings:')
+        self.settings['SUB_WEIGHTS']['HP'] = self.preferences_window.hp_doubleSpinBox.value()
+        self.settings['SUB_WEIGHTS']['DEF'] = self.preferences_window.def_doubleSpinBox.value()
+        self.settings['SUB_WEIGHTS']['SPD'] = self.preferences_window.spd_doubleSpinBox.value()
+        self.settings['SUB_WEIGHTS']['CR'] = self.preferences_window.cr_doubleSpinBox.value()
+        self.settings['SUB_WEIGHTS']['CD'] = self.preferences_window.cd_doubleSpinBox.value()
+        self.settings['SUB_WEIGHTS']['ATK'] = self.preferences_window.atk_doubleSpinBox.value()
+        self.settings['SUB_WEIGHTS']['RES'] = self.preferences_window.res_doubleSpinBox.value()
+        self.settings['SUB_WEIGHTS']['ACC'] = self.preferences_window.acc_doubleSpinBox.value()
+        self.settings['RUNE_SETS'].clear()
+        for item in self.preferences_window.setslistWidget.findItems("", QtCore.Qt.MatchContains):
+            self.settings['RUNE_SETS'].append(item.text())
+        txt = self.preferences_window.textEdit.toPlainText()
+        obj = json.loads(txt.strip())
+        self.settings['MONS_TYPES'] = obj
+
+        logger.debug('Aplying Settings and saving to settings.pk:')
         logger.debug(self.settings)
         with open('settings.pk', 'rb') as f:
             data = pickle.load(f)
@@ -143,7 +163,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def apply_filters(self):
         if self.setComboBox.currentText() == 'All':
-            set_filter = st.RUNE_SETS
+            # set_filter = st.RUNE_SETS
+            set_filter = self.settings['RUNE_SETS']
         else:
             set_filter = self.setComboBox.currentText()
         if self.slotComboBox.currentText() == 'All':
