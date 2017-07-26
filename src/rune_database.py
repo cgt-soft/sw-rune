@@ -2,6 +2,7 @@ import csv
 from src.rune import Rune
 import src.settings as st
 import numpy
+import src.pickle_settings as ps
 
 import logging
 
@@ -9,6 +10,7 @@ __author__ = 'CGT'
 
 logger = logging.getLogger(__name__)
 
+settings = ps.load_settings('Custom')
 
 class RuneDatabase(object):
 
@@ -16,6 +18,15 @@ class RuneDatabase(object):
         self.rune_list = []
         self.rune_objects = []
         self.stat_averages = {}
+        # self.settings = settings
+        # logger.debug('__init__:')
+        # logger.debug(self.settings)
+
+    def runes_to_sell(self):
+        return [rune for rune in self.rune_objects if rune.sell]
+
+    def runes_to_keep(self):
+        return [rune for rune in self.rune_objects if not rune.sell]
 
     def read_from_csv(self,csv_file):
         logger.info('Reading csv data from %s', csv_file)
@@ -24,11 +35,17 @@ class RuneDatabase(object):
         self.rune_list = data[1:-3]
 
     def to_objects(self):
-        logger.info('Converting rune data to objects')
+        self.rune_objects = []
         for data in self.rune_list:
-            rune = Rune(data)
-            rune.process()
+            rune = Rune(data_list=data)
             self.rune_objects.append(rune)
+
+    def process_runes(self):
+        Rune.settings = ps.load_settings('Custom')
+        logger.debug(Rune.settings)
+        # print(Rune.settings)
+        for rune in self.rune_objects:
+            rune.process()
 
     def statistics(self):
         perc_list = [rune for rune in self.rune_objects if (rune.level >= 12 and rune.slot in st.PERC_SLOTS)]

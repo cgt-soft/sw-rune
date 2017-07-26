@@ -5,6 +5,7 @@ from ui.prefrences import Ui_preferencesDialog
 from PyQt5 import QtCore, QtGui, QtWidgets
 from src.rune_database import RuneDatabase
 import src.settings as st
+import src.pickle_settings as ps
 import logging
 import pickle
 
@@ -12,6 +13,19 @@ __author__ = 'CGT'
 
 logger = logging.getLogger(__name__)
 
+# Catch PyQt tracebacks with Pycharm https://stackoverflow.com/a/37837374
+# Back up the reference to the exceptionhook
+sys._excepthook = sys.excepthook
+
+def my_exception_hook(exctype, value, traceback):
+    # Print the error and traceback
+    print(exctype, value, traceback)
+    # Call the normal Exception hook after
+    sys._excepthook(exctype, value, traceback)
+    sys.exit(1)
+
+# Set the exception hook to our wrapping function
+sys.excepthook = my_exception_hook
 
 class PreferencesDialog(QtWidgets.QDialog, Ui_preferencesDialog):
     def __init__(self):
@@ -20,10 +34,33 @@ class PreferencesDialog(QtWidgets.QDialog, Ui_preferencesDialog):
         self.setupUi(self)
         flags = QtCore.Qt.Drawer | QtCore.Qt.WindowStaysOnTopHint
         self.setWindowFlags(flags)
-        self.cancelButton.clicked.connect(self.close_preferences_window)
+        # self.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.apply_preferences)
+        self.buttonBox.button(QtWidgets.QDialogButtonBox.Cancel).clicked.connect(self.close_preferences_window)
+        self.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).clicked.connect(self.close_preferences_window)
+        self.buttonBox.button(QtWidgets.QDialogButtonBox.RestoreDefaults).clicked.connect(self.restore_default)
+        self.restore_settings('Custom')
+
+    def restore_settings(self, key='Default'):
+        self.settings = ps.load_settings(key=key)
+        self.hp_doubleSpinBox.setValue(self.settings['HP'])
+        self.def_doubleSpinBox.setValue(self.settings['DEF'])
+        self.spd_doubleSpinBox.setValue(self.settings['SPD'])
+        self.cr_doubleSpinBox.setValue(self.settings['CR'])
+        self.cd_doubleSpinBox.setValue(self.settings['CD'])
+        self.atk_doubleSpinBox.setValue(self.settings['ATK'])
+        self.res_doubleSpinBox.setValue(self.settings['RES'])
+        self.acc_doubleSpinBox.setValue(self.settings['ACC'])
+        logger.debug('restore_settnigs')
+        logger.debug(self.settings)
+
+    def restore_default(self):
+        self.restore_settings()
+
+
 
     def close_preferences_window(self):
         self.close()
+
 
 class AboutDialog(QtWidgets.QDialog, Ui_aboutDialog):
     def __init__(self):
@@ -37,14 +74,18 @@ class AboutDialog(QtWidgets.QDialog, Ui_aboutDialog):
     def close_about_window(self):
         self.close()
 
+
 class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         QtWidgets.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
-        self.rune_database = RuneDatabase()
         self.about_window = AboutDialog()
         self.preferences_window = PreferencesDialog()
+        self.settings = self.preferences_window.settings
+        logger.debug('MyApp.__init__:')
+        logger.debug(self.settings)
+        self.rune_database = RuneDatabase()
         self.set_connections()
         self.load_from_pickle()
 
@@ -54,6 +95,32 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.filtersButton.clicked.connect(self.apply_filters)
         self.actionAbout.triggered.connect(self.open_about_dialog)
         self.actionPreferences.triggered.connect(self.open_preferences_dialog)
+        self.preferences_window.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.apply_preferences)
+
+    def apply_preferences(self):
+        self.settings['HP'] = self.preferences_window.hp_doubleSpinBox.value()
+        self.settings['DEF'] = self.preferences_window.def_doubleSpinBox.value()
+        self.settings['SPD'] = self.preferences_window.spd_doubleSpinBox.value()
+        self.settings['CR'] = self.preferences_window.cr_doubleSpinBox.value()
+        self.settings['CD'] = self.preferences_window.cd_doubleSpinBox.value()
+        self.settings['ATK'] = self.preferences_window.atk_doubleSpinBox.value()
+        self.settings['RES'] = self.preferences_window.res_doubleSpinBox.value()
+        self.settings['ACC'] = self.preferences_window.acc_doubleSpinBox.value()
+        logger.debug('Aplying Settings:')
+        logger.debug(self.settings)
+        with open('settings.pk', 'rb') as f:
+            data = pickle.load(f)
+            data['Custom'] = self.settings
+        with open('settings.pk', 'wb') as f:
+            pickle.dump(data, f)
+
+        self.rune_database.process_runes()
+        self.rune_database.statistics()
+        self.rune_database.check_to_sell()
+        self.populate_list(self.rune_database.rune_objects)
+        self.statusBar().showMessage('{} runes to sell, {} to keep'.format(len(self.rune_database.runes_to_sell()),
+                                                                           len(self.rune_database.runes_to_keep())))
+
 
     def open_preferences_dialog(self):
         self.preferences_window.show()
@@ -63,6 +130,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             with open('data.pk', 'rb') as f:
                 self.rune_database.rune_objects = pickle.load(f)
             self.populate_list(self.rune_database.rune_objects)
+            self.statusBar().showMessage('{} runes read'.format(str(len(self.rune_database.rune_objects))))
         except:
             pass
 
@@ -112,7 +180,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             filtered_runes = [rune for rune in filtered_runes if self.mainstatComboBox.currentText() in rune.main_stat]
         self.statusBar().showMessage('{} runes filtered'.format(len(filtered_runes)))
-        self.runeTableWidget.setRowCount(0)
         self.populate_list(filtered_runes)
 
     def open_csv(self):
@@ -127,12 +194,13 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             self.rune_database.read_from_csv(file_name)
             self.statusBar().showMessage('{} runes read'.format(str(len(self.rune_database.rune_list))))
             self.rune_database.to_objects()
+            self.rune_database.process_runes()
             self.rune_database.statistics()
             self.rune_database.check_to_sell()
             self.populate_list(self.rune_database.rune_objects)
 
     def populate_list(self, rune_list):
-        rune_id = 0
+        self.runeTableWidget.setRowCount(0)
         for rune in rune_list:
             # tag = '{}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(rune.id, rune.equipped, rune.slot,
             #                                                       rune.rune_set, rune.level, rune.main_stat,

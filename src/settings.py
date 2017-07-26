@@ -1,4 +1,6 @@
 __author__ = 'CGT'
+import pickle
+
 RUNE_SETS = ['Energy', 'Swift', 'Blade', 'Fatal', 'Despair',
              'Violent', 'Focus', 'Guard', 'Endure', 'Shield', 'Revenge',
              'Rage', 'Will', 'Nemesis', 'Vampire', 'Destroy',
@@ -7,8 +9,8 @@ PERC_SLOTS = [2, 4, 6]
 FLAT_SLOTS = [1, 3, 5]
 SPD_SLOT = [2]
 AV_BASE_STATS = {'HP' : 9900, 'DEF' : 580, 'ATK' : 690, 'SPD' : 102}
-SUB_WEIGHTS = {'HP' : 1, 'DEF' : 1, 'SPD' : 1.2,
-               'CR' : 1.8, 'CD' : 1.8, 'ATK': 1,
+SUB_WEIGHTS = {'HP' : 1.0, 'DEF' : 1.0, 'SPD' : 1.2,
+               'CR' : 1.8, 'CD' : 1.8, 'ATK': 1.0,
                'RES' : 0.6, 'ACC' : 0.6}
 SUB_INCREMENT = {'FLAT' : 5, 'PERC' : 11}
 # TYPES = {'SUP' : {'SETS' : ['Energy', 'Swift', 'Despair',
@@ -53,5 +55,10 @@ TYPES = {   'TNK': {    'SETS' : ['Energy', 'Guard', 'Endure', 'Shield', 'Reveng
             'CCT': {    'SETS': ['Despair', 'Energy', 'Will', 'Nemesis', 'Guard', 'Shield', 'Endure', '???'],
                         'SUBS': ['DEF', 'HP', 'SPD', 'ACC']},
             'BMB': {    'SETS': ['Fatal', 'Violent', 'Energy', 'Will', 'Nemesis', 'Guard', 'Shield', 'Endure', '???'],
-                        'SUBS': ['ATK', 'SPD', 'ACC']},
+                        'SUBS': ['ATK', 'SPD', 'ACC']}
 }
+
+if __name__ == '__main__':
+    settings = {'Default': SUB_WEIGHTS}
+    with open('settings.pk','wb') as f:
+        pickle.dump(settings, f)

@@ -1,5 +1,7 @@
 import logging
 import src.settings as st
+import src.pickle_settings as ps
+
 
 __author__ = 'CGT'
 
@@ -7,6 +9,9 @@ logger = logging.getLogger(__name__)
 
 
 class Rune(object):
+    settings = ps.load_settings('Custom')
+    # print(settings)
+
     def __init__(self, data_list=None):
         if data_list is None:
             logger.warning('Initializing rune with None type data_list')
@@ -29,7 +34,8 @@ class Rune(object):
             self.current_efficiency = data_list[13]
             self.max_efficiency = data_list[14]
         # self.stats = {'HP' : 0, 'CR' : 0, 'CD' : 0, 'ATK' : 0, 'ACC': 0, 'RES' : 0, 'SPD': 0, 'DEF': 0}
-        self.stats = {key: 0 for key in st.SUB_WEIGHTS.keys()}
+        # self.stats = {key: 0 for key in st.SUB_WEIGHTS.keys()}
+        self.stats = {key: 0 for key in self.settings.keys()}
         self.grinded = False
         self.sums = {key: 0 for key in st.TYPES.keys()}
         self.sell = True
@@ -38,6 +44,11 @@ class Rune(object):
 
     def process(self):
         logger.debug('Processing rune id=%s', self.id)
+        # print(self.settings)
+        self.stats = {key: 0 for key in self.settings.keys()}
+        self.sums = {key: 0 for key in st.TYPES.keys()}
+        self.sell = True
+        self.grinded = False
         if self.slot in st.PERC_SLOTS:
             subs_to_check = [self.main_stat, self.sub_fixed] + self.subs
         else:
@@ -102,12 +113,14 @@ class Rune(object):
         for rune_type in st.TYPES.keys():
             for stat in self.stats.keys():
                 if stat in st.TYPES[rune_type]['SUBS'] and self.rune_set in st.TYPES[rune_type]['SETS']:
-                    self.sums[rune_type] += st.SUB_WEIGHTS[stat] * self.stats[stat]
+                    self.sums[rune_type] += self.settings[stat] * self.stats[stat]
+                    # self.sums[rune_type] += self.settings[stat] * self.stats[stat]
         logger.debug('PROCESSED RUNE ID %s, set %s', self.id, self.rune_set)
         logger.debug(self.stats)
         logger.debug(self.sums)
         self.mons_type = max(self.sums, key= self.sums.get)
         logger.debug(self.mons_type)
+        print(self.id, self.sums)
 
     def check_to_sell(self, averages):
         n_upgrades = int((15 - self.level) / 3)
