@@ -58,8 +58,32 @@ TYPES = {   'TNK': {    'SETS' : ['Energy', 'Guard', 'Endure', 'Shield', 'Reveng
                         'SUBS': ['ATK', 'SPD', 'ACC']}
 }
 
+SUB_INC = {'SPD': {'5': {'MIN': 3, 'MAX': 5},
+                   '6': {'MIN': 4, 'MAX': 6}},
+           'CR': {'5': {'MIN': 3, 'MAX': 5},
+                  '6': {'MIN': 4, 'MAX': 6}},
+           'CD': {'5': {'MIN': 3, 'MAX': 5},
+                  '6': {'MIN': 4, 'MAX': 7}},
+           'ATK': {'5': {'MIN': 4, 'MAX': 7},
+                   '6': {'MIN': 5, 'MAX': 8}},
+           'HP': {'5': {'MIN': 4, 'MAX': 7},
+                  '6': {'MIN': 5, 'MAX': 8}},
+           'DEF': {'5': {'MIN': 4, 'MAX': 7},
+                   '6': {'MIN': 5, 'MAX': 8}},
+           'ACC': {'5': {'MIN': 3, 'MAX': 7},
+                   '6': {'MIN': 4, 'MAX': 8}},
+           'RES': {'5': {'MIN': 3, 'MAX': 7},
+                   '6': {'MIN': 4, 'MAX': 8}},
+           }
+
+MAIN_INC = {'HP': 16, 'ATK': 16, 'DEF': 16}
+
+SUB_TRANS = {'SPD': 'SPD', 'HP': 'HP', 'DEF': 'DEF', 'ATK': 'ATK',
+             'CRI Rate': 'CR', 'CRI Dmg': 'CD', 'Accuracy': 'ACC',
+             'Resistance': 'RES'}
+
 if __name__ == '__main__':
-    settings = {'Default': {'SUB_WEIGHTS': SUB_WEIGHTS, 'RUNE_SETS' : RUNE_SETS, 'MONS_TYPES': TYPES}}
+    settings = {'Default': {'SUB_WEIGHTS': SUB_WEIGHTS, 'RUNE_SETS' : RUNE_SETS, 'MONS_TYPES': TYPES, 'SUB_TRANS': SUB_TRANS}}
     print(settings)
     with open('settings.pk','wb') as f:
         pickle.dump(settings, f)
