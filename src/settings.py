@@ -24,21 +24,22 @@ SUB_INCREMENT = {'FLAT' : 5, 'PERC' : 11}
 ABBREVIATIONS = { 'TNK' : 'Tank', 'PDD' : 'Pure Damage Dealer', 'VDD' : 'Violent Damage Dealer',
                   'SDD' : 'Speed Damage Dealer', 'ADD' : 'Accuracy Damage Dealer', 'RDD' : 'Raids Damage Dealer',
                   'HDD' : 'HP Damage Dealer', 'DDD' : 'DEF Damage Dealer', 'SSP' : 'Speed Support',
-                  'RSP' : 'Raid Support', 'SDM' : 'Speed Demon', 'CCT' : 'Crowd Control', 'BMB' : 'Bomber'}
-TYPES = {   'TNK': {    'SETS' : ['Energy', 'Guard', 'Endure', 'Shield', 'Revenge', 'Will', 'Nemesis', '???'],
+                  'RSP' : 'Raid Support', 'SDM' : 'Speed Demon', 'SCC' : 'Suport Crowd Control',
+                  'DCC' : 'Damage Crowd Control', 'BMB' : 'Bomber'}
+TYPES = {   'TNK': {    'SETS' : ['Energy', 'Guard', 'Endure', 'Shield', 'Revenge', 'Will', 'Nemesis', 'Focus', '???'],
                         'SUBS' : ['HP', 'DEF', 'RES']},
             'PDD': {    'SETS' : ['Fatal', 'Rage', 'Blade', 'Will', 'Nemesis', 'Vampire', 'Destroy', '???'],
                         'SUBS' : ['ATK', 'CR', 'CD']},
             'VDD': {    'SETS' : ['Violent', 'Blade', 'Will', 'Nemesis', 'Vampire', 'Destroy', '???'],
                         'SUBS' : ['ATK', 'CR', 'CD']},
             'SDD': {    'SETS' : ['Violent', 'Fatal', 'Rage', 'Will', 'Blade', 'Will', 'Nemesis', 'Vampire',
-                                  'Destroy', '???'],
+                                  'Destroy', 'Swift', 'Revenge', '???'],
                         'SUBS' : ['ATK', 'CR', 'CD', 'SPD']},
             'ADD': {    'SETS' : ['Violent', 'Blade', 'Will', 'Nemesis', 'Vampire', 'Destroy', 'Revenge',
-                                  'Focus', '???'],
+                                  'Focus', 'Revenge', '???'],
                         'SUBS' : ['ATK', 'CR', 'CD', 'ACC']},
             'RDD': {    'SETS' : ['Violent', 'Fatal', 'Rage', 'Vampire', 'Blade', 'Will', 'Nemesis',
-                                  'Revenge', 'Destroy', '???'],
+                                  'Revenge', 'Endure', '???'],
                         'SUBS' : ['ATK', 'CR', 'CD', 'RES']},
             'HDD': {    'SETS' : ['Violent', 'Fatal', 'Blade', 'Rage', 'Will', 'Nemesis', 'Vampire',
                                   'Energy', 'Destroy', 'Shield', '???'],
@@ -48,14 +49,19 @@ TYPES = {   'TNK': {    'SETS' : ['Energy', 'Guard', 'Endure', 'Shield', 'Reveng
                         'SUBS': ['DEF', 'CR', 'CD']},
             'SSP': {    'SETS': ['Violent', 'Swift', 'Energy', 'Will', 'Nemesis', 'Guard', 'Shield', '???'],
                         'SUBS': ['DEF', 'HP', 'SPD']},
-            'RSP': {    'SETS': ['Violent', 'Swift', 'Energy', 'Will', 'Nemesis', 'Guard', 'Endure', 'Shield', '???'],
+            'RSP': {    'SETS': ['Violent', 'Swift', 'Energy', 'Will', 'Nemesis', 'Guard', 'Endure', 'Shield',
+                                 'Revenge', '???'],
                         'SUBS': ['DEF', 'HP', 'SPD', 'RES']},
             'SDM': {    'SETS': ['Swift', 'Energy', 'Will', 'Nemesis', 'Guard', 'Shield', 'Endure', 'Blade', '???'],
                         'SUBS': ['SPD']},
-            'CCT': {    'SETS': ['Despair', 'Energy', 'Will', 'Nemesis', 'Guard', 'Shield', 'Endure', '???'],
+            'SCC': {    'SETS': ['Despair', 'Energy', 'Will', 'Nemesis', 'Guard', 'Shield', 'Endure', 'Focus', '???'],
                         'SUBS': ['DEF', 'HP', 'SPD', 'ACC']},
+            'DCC': {    'SETS': ['Despair', 'Blade', 'Will', 'Nemesis', 'Vampire', 'Destroy', '???'],
+                        'SUBS': ['ATK', 'CR', 'CD', 'SPD', 'ACC']},
             'BMB': {    'SETS': ['Fatal', 'Violent', 'Energy', 'Will', 'Nemesis', 'Guard', 'Shield', 'Endure', '???'],
-                        'SUBS': ['ATK', 'SPD', 'ACC']}
+                        'SUBS': ['ATK', 'SPD', 'ACC']},
+            'TOTAL': {  'SETS': RUNE_SETS,
+                        'SUBS': ['DEF', 'HP', 'SPD', 'ACC', 'RES', 'ATK', 'CD', 'CR']}
 }
 
 SUB_INC = {'SPD': {'5': {'MIN': 3, 'MAX': 5},
@@ -82,8 +88,23 @@ SUB_TRANS = {'SPD': 'SPD', 'HP': 'HP', 'DEF': 'DEF', 'ATK': 'ATK',
              'CRI Rate': 'CR', 'CRI Dmg': 'CD', 'Accuracy': 'ACC',
              'Resistance': 'RES'}
 
+STAT_COMP = {'PERC': {'HP': 12, 'ATK': 12, 'DEF': 12, 'RES': 13, 'ACC': 13, 'CR': 11,'CD': 15},
+             'FLAT': {'SPD': 3, 'HP': 360, 'ATK': 25, 'DEF': 25}}
+
+MAX_VALUE = {'SPD': 42, 'HP': 63, 'ATK': 63, 'DEF': 63, 'RES': 64, 'ACC': 64, 'CR': 58,'CD': 80}
+
+LEVEL_COMP = [28,28,28,21,21,21,14,14,14,7,7,7]
+
+EFF_MODELS = ['Barion', 'VPM']
+
+MODEL = ['VPM']
+
+
+
 if __name__ == '__main__':
-    settings = {'Default': {'SUB_WEIGHTS': SUB_WEIGHTS, 'RUNE_SETS' : RUNE_SETS, 'MONS_TYPES': TYPES, 'SUB_TRANS': SUB_TRANS}}
+    settings = {'Default': {'SUB_WEIGHTS': SUB_WEIGHTS, 'RUNE_SETS' : RUNE_SETS, 'MONS_TYPES': TYPES,
+                            'SUB_TRANS': SUB_TRANS, 'AV_BASE_STATS': AV_BASE_STATS, 'STAT_COMP': STAT_COMP,
+                            'LEVEL_COMP': LEVEL_COMP, 'MAX_VALUE': MAX_VALUE}}
     print(settings)
     with open('settings.pk','wb') as f:
         pickle.dump(settings, f)

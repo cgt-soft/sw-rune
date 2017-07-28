@@ -125,7 +125,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         txt = self.preferences_window.textEdit.toPlainText()
         obj = json.loads(txt.strip())
         self.settings['MONS_TYPES'] = obj
-
+        self.statusBar().showMessage('Applying settings...')
         logger.debug('Aplying Settings and saving to settings.pk:')
         logger.debug(self.settings)
         with open('settings.pk', 'rb') as f:
@@ -162,6 +162,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.about_window.show()
 
     def apply_filters(self):
+        self.statusBar().showMessage('Applying filters...')
         if self.setComboBox.currentText() == 'All':
             # set_filter = st.RUNE_SETS
             set_filter = self.settings['RUNE_SETS']
@@ -200,8 +201,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             pass
         else:
             filtered_runes = [rune for rune in filtered_runes if self.mainstatComboBox.currentText() in rune.main_stat]
-        self.statusBar().showMessage('{} runes filtered'.format(len(filtered_runes)))
         self.populate_list(filtered_runes)
+        self.statusBar().showMessage('{} runes filtered'.format(len(filtered_runes)))
 
     def open_csv(self):
         # file_name = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File',"All Files (*);;CSV Files (*.csv)")
@@ -213,15 +214,18 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         if file_name:
             self.statusBar().showMessage('reading file {}'.format(file_name))
             self.rune_database.read_from_csv(file_name)
-            self.statusBar().showMessage('{} runes read'.format(str(len(self.rune_database.rune_list))))
+            self.statusBar().showMessage('Processing {} runes...'.format(str(len(self.rune_database.rune_list))))
             self.rune_database.to_objects()
             self.rune_database.process_runes()
             self.rune_database.statistics()
             self.rune_database.check_to_sell()
             self.populate_list(self.rune_database.rune_objects)
+            self.statusBar().showMessage('{} runes to sell, {} to keep'.format(len(self.rune_database.runes_to_sell()),
+                                                                               len(self.rune_database.runes_to_keep())))
 
     def populate_list(self, rune_list):
         self.runeTableWidget.setRowCount(0)
+        self.statusBar().showMessage('Populating list...')
         for rune in rune_list:
             # tag = '{}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(rune.id, rune.equipped, rune.slot,
             #                                                       rune.rune_set, rune.level, rune.main_stat,
@@ -229,8 +233,10 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             #                                                       rune.sums[rune.mons_type])
             # item = QtWidgets.QListWidgetItem()
             # item.setText(tag)
-            data = [rune.equipped, rune.slot, rune.rune_set, rune.level, rune.main_stat,
-                    rune.sub_fixed, rune.subs, rune.mons_type, float(round(rune.sums[rune.mons_type], 2))]
+            data = [rune.equipped, rune.slot, rune.rune_set, rune.level, rune.stars, rune.main_stat,
+                    # rune.sub_fixed, rune.subs, rune.mons_type, float(round(rune.sums[rune.mons_type], 2))]
+                    # rune.sub_fixed, rune.subs, rune.mons_type, float(round(rune.vpm_efficiency[rune.mons_type], 3))]
+                    rune.sub_fixed, rune.subs, rune.mons_type, rune.vpm_efficiency[rune.mons_type]]
             position = self.runeTableWidget.rowCount()
             self.runeTableWidget.insertRow(position)
             for index, d in enumerate(data):
