@@ -1,0 +1,21 @@
+<RCC>
+  <qresource prefix="img">
+    <file>resources/icons/help-about-3.png</file>
+    <file>resources/icons/document-new-8.png</file>
+    <file>resources/icons/document-open-8.png</file>
+    <file>resources/icons/document-save-5.png</file>
+    <file>resources/icons/document-save-as-6.png</file>
+    <file>resources/icons/system-run-6.png</file>
+  </qresource>
+  <qresource prefix="qss-icons">
+    <file>resources/qss/img_rc/add-line_horizontal.png</file>
+    <file>resources/qss/img_rc/add-line_vertical.png</file>
+    <file>resources/qss/img_rc/array_down.png</file>
+    <file>resources/qss/img_rc/checkbox_checked.png</file>
+    <file>resources/qss/img_rc/checkbox_unchecked.png</file>
+    <file>resources/qss/img_rc/radio_normal.png</file>
+    <file>resources/qss/img_rc/radio_selected.png</file>
+    <file>resources/qss/img_rc/sub-line_horizontal.png</file>
+    <file>resources/qss/img_rc/sub-line_vertical.png</file>
+  </qresource>
+</RCC>

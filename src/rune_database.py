@@ -19,15 +19,16 @@ class RuneDatabase(object):
         self.rune_list = []
         self.rune_objects = []
         self.efficiency_averages = {}
+        self.barion_averages = {}
         # self.settings = settings
         # logger.debug('__init__:')
         # logger.debug(self.settings)
 
     def runes_to_sell(self):
-        return [rune for rune in self.rune_objects if rune.sell]
+        return [rune for rune in self.rune_objects if rune.sell_final]
 
     def runes_to_keep(self):
-        return [rune for rune in self.rune_objects if not rune.sell]
+        return [rune for rune in self.rune_objects if not rune.sell_final]
 
     def read_from_csv(self,csv_file):
         logger.info('Reading csv data from %s', csv_file)
@@ -67,11 +68,17 @@ class RuneDatabase(object):
                                         rune.vpm_efficiency[rune_type] > 0])
             vpm_av_flat = numpy.median([rune.vpm_efficiency[rune_type] for rune in flat_list if
                                         rune.vpm_efficiency[rune_type] > 0])
+
             self.efficiency_averages[rune_type] = {'PERC': vpm_av_perc, 'FLAT': vpm_av_flat}
+            barion_av_perc = numpy.median([rune.max_efficiency for rune in perc_list if
+                                           rune.vpm_efficiency[rune_type] > 0])
+            barion_av_flat = numpy.median([rune.max_efficiency for rune in flat_list if
+                                           rune.vpm_efficiency[rune_type] > 0])
+            self.barion_averages[rune_type] = {'PERC': barion_av_perc, 'FLAT': barion_av_flat}
         # logger.debug('STATISTICS DONE')
         # logger.debug(self.stat_averages)
 
     def check_to_sell(self):
         for rune in self.rune_objects:
             # rune.check_to_sell(self.stat_averages)
-            rune.check_to_sell(self.efficiency_averages)
+            rune.check_to_sell(self.efficiency_averages, self.barion_averages)

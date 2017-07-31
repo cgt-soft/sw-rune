@@ -35,7 +35,8 @@ class Rune(object):
             self.max_stats = {key: {'MIN': 0, 'MAX': 0} for key in self.settings['SUB_WEIGHTS'].keys()}
         self.converted = False
         self.sums = {key: 0 for key in self.settings['MONS_TYPES'].keys()}
-        self.sell = True
+        self.sell = {'VPM': True, 'Barion': True}
+        self.sell_final = True
         self.n_subs = len([sub for sub in self.subs if sub])
         self.mons_type = None
         self.vpm_efficiency = {key: 0.0 for key in self.settings['MONS_TYPES'].keys()}
@@ -145,7 +146,7 @@ class Rune(object):
         #         splitted = self.main_stat.split()
         #         self.stats['MAIN_INC']
 
-    def check_to_sell(self, averages):
+    def check_to_sell(self, vpm_averages, barion_averages):
         # n_upgrades = int((15 - self.level) / 3)
         # if n_upgrades > 0: n_upgrades -= 1
         # logger.debug('n_upgrades %s, level %s', n_upgrades, self.level)
@@ -157,5 +158,9 @@ class Rune(object):
         #     if self.sums[rune_type] + st.SUB_INCREMENT[slot_type]*n_upgrades > averages[rune_type][slot_type]:
         #         self.sell = False
         for rune_type in self.settings['MONS_TYPES'].keys():
-            if self.vpm_efficiency[rune_type] > averages[rune_type][slot_type]:
-                self.sell = False
+            if self.vpm_efficiency[rune_type] > vpm_averages[rune_type][slot_type]:
+                self.sell['VPM'] = False
+            if self.max_efficiency > barion_averages[rune_type][slot_type]:
+                self.sell['Barion'] = False
+
+        self.sell_final = self.sell['VPM'] or self.sell['Barion']

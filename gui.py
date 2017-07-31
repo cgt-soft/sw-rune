@@ -1,10 +1,9 @@
 import sys
 from ui.main_window import Ui_MainWindow
 from ui.about import Ui_aboutDialog
-from ui.prefrences import Ui_preferencesDialog
+from ui.preferences import Ui_preferencesDialog
 from PyQt5 import QtCore, QtGui, QtWidgets
 from src.rune_database import RuneDatabase
-import src.settings as st
 import src.pickle_settings as ps
 import logging
 import pickle
@@ -17,17 +16,16 @@ logger = logging.getLogger(__name__)
 # Catch PyQt tracebacks with Pycharm https://stackoverflow.com/a/37837374
 # Back up the reference to the exceptionhook
 sys._excepthook = sys.excepthook
-
 def my_exception_hook(exctype, value, traceback):
     # Print the error and traceback
     print(exctype, value, traceback)
     # Call the normal Exception hook after
     sys._excepthook(exctype, value, traceback)
     sys.exit(1)
-
 # Set the exception hook to our wrapping function
 sys.excepthook = my_exception_hook
 
+# style_sheet = 'resources/qss/style_blue.qss'
 
 class PreferencesDialog(QtWidgets.QDialog, Ui_preferencesDialog):
     def __init__(self):
@@ -194,9 +192,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.statusComboBox.currentText() == 'All':
             pass
         elif self.statusComboBox.currentText() == 'Sell':
-            filtered_runes = [rune for rune in filtered_runes if rune.sell]
+            filtered_runes = [rune for rune in filtered_runes if rune.sell_final]
         else:
-            filtered_runes = [rune for rune in filtered_runes if not rune.sell]
+            filtered_runes = [rune for rune in filtered_runes if not rune.sell_final]
         if self.mainstatComboBox.currentText() == 'All':
             pass
         else:
@@ -207,7 +205,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def open_csv(self):
         # file_name = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File',"All Files (*);;CSV Files (*.csv)")
         options = QtWidgets.QFileDialog.Options()
-        # options |= QtWidgets.QFileDialog.DontUseNativeDialog
+        options |= QtWidgets.QFileDialog.DontUseNativeDialog
         file_name, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File',"",
                                                              "Comma Separated Values file(*.csv);;All Files (*)",
                                                              options=options)
@@ -236,15 +234,17 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             data = [rune.equipped, rune.slot, rune.rune_set, rune.level, rune.stars, rune.main_stat,
                     # rune.sub_fixed, rune.subs, rune.mons_type, float(round(rune.sums[rune.mons_type], 2))]
                     # rune.sub_fixed, rune.subs, rune.mons_type, float(round(rune.vpm_efficiency[rune.mons_type], 3))]
-                    rune.sub_fixed, rune.subs, rune.mons_type, rune.vpm_efficiency[rune.mons_type]]
+                    rune.sub_fixed, rune.subs, rune.mons_type, rune.vpm_efficiency[rune.mons_type], rune.max_efficiency]
             position = self.runeTableWidget.rowCount()
             self.runeTableWidget.insertRow(position)
             for index, d in enumerate(data):
                 item = QtWidgets.QTableWidgetItem()
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
                 item.setText(str(d))
-                if rune.sell:
+                if rune.sell['VPM'] and rune.sell['Barion']:
                     item.setBackground(QtGui.QColor(200, 0, 0))
+                elif rune.sell['VPM'] or rune.sell['Barion']:
+                    item.setBackground(QtGui.QColor(255, 140, 0))
                 else:
                     item.setBackground(QtGui.QColor(0, 200, 0))
                 self.runeTableWidget.setItem(position, index, item)
@@ -267,5 +267,9 @@ if __name__ == "__main__":
     logging.basicConfig(filename="test.log", filemode='w', level=logging.DEBUG)
     app = QtWidgets.QApplication(sys.argv)
     window = MyApp()
+
+    # with open(style_sheet, "r") as fh:
+    #     app.setStyleSheet(fh.read())
+
     window.show()
     sys.exit(app.exec_())
