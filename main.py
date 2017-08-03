@@ -51,6 +51,17 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionAbout.triggered.connect(self.about_action_triggered)
         self.actionPreferences.triggered.connect(self.preferrences_action_triggered)
         self.filtersButton.clicked.connect(self.apply_filters_button_clicked)
+        self.classifyButton.clicked.connect(self.classify_button_clicked)
+
+    def classify_button_clicked(self):
+        self.rune_database.settings = self.settings.value('Preferences')
+        self.statusBar().showMessage('Processing {} runes...'.format(len(self.rune_database.rune_objects)))
+        self.rune_database.process_runes()
+        self.statusBar().showMessage('Calculating statistics...')
+        self.rune_database.statistics()
+        self.statusBar().showMessage('Classifying...')
+        self.rune_database.check_to_sell()
+        self.populate_list(self.rune_database.rune_objects)
 
     def apply_filters_button_clicked(self):
         self.statusBar().showMessage('Applying filters...')
