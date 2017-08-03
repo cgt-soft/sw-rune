@@ -1,6 +1,7 @@
 import logging
 import src.settings as st
-import src.pickle_settings as ps
+from preferences import default_settings
+import src.mapping as mp
 
 
 __author__ = 'CGT'
@@ -8,38 +9,80 @@ __author__ = 'CGT'
 logger = logging.getLogger(__name__)
 
 
-
-
 class Rune(object):
-    settings = ps.load_settings('Custom')
+    # settings = ps.load_settings('Custom')
     # print(settings)
+    settings = default_settings
 
-    def __init__(self, data_list):
-        logger.debug('Initialize rune, id = %s', data_list[0])
-        self.id = data_list[0]
-        self.equipped = data_list[1]
-        self.rune_set = data_list[2]
-        self.slot = int(data_list[3])
-        self.stars = int(data_list[4])
-        self.level = int(data_list[5])
-        self.price = data_list[6]
-        self.main_stat = data_list[7]
-        self.sub_fixed = data_list[8]
-        self.subs = data_list[9:13]
-        self.current_efficiency = data_list[13]
-        self.max_efficiency = float(data_list[14].replace(' %', ''))
-        self.stats = {key: {'Value': 0, 'Grinded': False} for key in self.settings['SUB_WEIGHTS'].keys()}
+    def __init__(self, data_list = None):
+        # logger.debug('Initialize rune, id = %s', data_list[0])
+        self.id = data_list[0] if data_list else None
+        self.equipped = data_list[1] if data_list else None
+        self.rune_set = data_list[2] if data_list else None
+        self.slot = int(data_list[3]) if data_list else None
+        self.stars = int(data_list[4]) if data_list else None
+        self.level = int(data_list[5]) if data_list else None
+        self.price = data_list[6] if data_list else None
+        self.main_stat = data_list[7] if data_list else None
+        self.sub_fixed = data_list[8] if data_list else None
+        self.subs = data_list[9:13] if data_list else []
+        self.current_efficiency = float(data_list[13].replace(' %', '')) if data_list else None
+        self.max_efficiency = float(data_list[14].replace(' %', '')) if data_list else None
+        self.barion_efficiency = float(data_list[15].replace(' %', '')) if data_list else None
+        self.original_quality = 'Unknown' if data_list else None
+        self.stats = {key: {'Value': 0, 'Grinded': False} for key in self.settings['substat_weights'].keys()}
         if self.level == 15:
             self.max_stats = self.stats
         else:
-            self.max_stats = {key: {'MIN': 0, 'MAX': 0} for key in self.settings['SUB_WEIGHTS'].keys()}
+            self.max_stats = {key: {'MIN': 0, 'MAX': 0} for key in self.settings['substat_weights'].keys()}
         self.converted = False
-        self.sums = {key: 0 for key in self.settings['MONS_TYPES'].keys()}
+        self.sums = {key: 0 for key in self.settings['monster_types'].keys()}
         self.sell = {'VPM': True, 'Barion': True}
-        self.sell_final = True
+        # self.sell_final = True
         self.n_subs = len([sub for sub in self.subs if sub])
         self.mons_type = None
-        self.vpm_efficiency = {key: 0.0 for key in self.settings['MONS_TYPES'].keys()}
+        self.vpm_efficiency = {key: 0.0 for key in self.settings['monster_types'].keys()}
+
+    def map_json_rune(self, json_rune, monster=None):
+        if monster:
+            self.equipped = monster
+        else:
+            self.equipped = '0'
+            # Set
+        self.rune_set = mp.exports['rune']['sets'][json_rune['set_id']]
+        # Slot
+        self.slot = json_rune['slot_no']
+        # Stars??
+        self.stars = json_rune['class']
+        # level
+        self.level = json_rune['upgrade_curr']
+        # Sell price
+        self.price = json_rune['sell_value']
+        # Pimary effect = Main stat
+        self.main_stat = mp.get_rune_effect(json_rune['pri_eff'])
+        # Fixed effect
+        self.sub_fixed = mp.get_rune_effect(json_rune['prefix_eff'])
+        # Substats
+        self.n_subs = 0
+        for eff in json_rune['sec_eff']:
+            self.subs.append(mp.get_rune_effect(eff))
+            self.n_subs += 1
+        for i in range(self.n_subs,4):
+            self.subs.append('')
+        # for i in range(0, 4):
+        #     if len(json_rune['sec_eff']) - 1 >= i:
+        #         self.subs.append(mp.get_rune_effect(json_rune['sec_eff'][i]))
+        #     else:
+        #         self.subs.append('')
+        # Potentials
+        efficiencies = mp.get_rune_efficiency(json_rune)
+        self.current_efficiency = float("{0:.2f}".format(efficiencies['current']))
+        self.max_efficiency = float("{0:.2f}".format(efficiencies['max']))
+        # Barion efficiency
+        self.barion_efficiency = float("{0:.2f}".format(mp.barion_rune_efficiency(json_rune)))
+        # Original quality (Legend, hero, etc)
+        self.original_quality = mp.exports['rune']['quality'][json_rune['rank']]
+
 
     def get_stat(self, stat):
         [key, val, grinded, perc] = [None, None, None, None]
@@ -59,7 +102,7 @@ class Rune(object):
                 val = int(splitted[-2].replace('%', ''))
             else:
                 val = int(splitted[-1].replace('%', ''))
-            key = self.settings['SUB_TRANS'][s]
+            key = self.settings['sub_trans'][s]
             if '->' in splitted[-2]:
                 grinded = True
         logger.debug('key = %s, val = %s, grinded = %s, perc = %s', key, val, grinded, perc)
@@ -85,21 +128,21 @@ class Rune(object):
                     if key == 'SPD':
                         self.stats[key]['Value'] += val
                     else:
-                        self.stats[key]['Value'] += val / self.settings['AV_BASE_STATS'][key] * 100
+                        self.stats[key]['Value'] += val / self.settings['average_base_stats'][key] * 100
         logger.debug('stats = %s', self.stats)
         main_stat, _, _, perc = self.get_stat(self.main_stat)
-        for rune_type in self.settings['MONS_TYPES'].keys():
+        for rune_type in self.settings['monster_types'].keys():
             # Calculate VPM efficiency
             for stat in self.stats.keys():
                 logger.debug('set: %s, type: %s, stat: %s, main: %s',self.rune_set, rune_type, stat, main_stat)
                 # if stat in self.settings['MONS_TYPES'][rune_type]['SUBS'] and self.rune_set in self.settings['MONS_TYPES'][rune_type]['SETS'] and main_stat in self.settings['MONS_TYPES'][rune_type]['SUBS']:
-                if stat in self.settings['MONS_TYPES'][rune_type]['SUBS'] and \
-                                self.rune_set in self.settings['MONS_TYPES'][rune_type]['SETS'] and \
-                                ((self.slot in st.PERC_SLOTS and main_stat in self.settings['MONS_TYPES'][rune_type]['SUBS']) or
+                if stat in self.settings['monster_types'][rune_type]['SUBS'] and \
+                                self.rune_set in self.settings['monster_types'][rune_type]['SETS'] and \
+                                ((self.slot in st.PERC_SLOTS and main_stat in self.settings['monster_types'][rune_type]['SUBS']) or
                                 self.slot not in st.PERC_SLOTS):
-                    self.vpm_efficiency[rune_type] += self.settings['SUB_WEIGHTS'][stat] * \
+                    self.vpm_efficiency[rune_type] += self.settings['substat_weights'][stat] * \
                                                       self.stats[stat]['Value'] / \
-                                                      self.settings['MAX_VALUE'][stat]
+                                                      self.settings['max_value'][stat]
                     logger.debug(self.vpm_efficiency[rune_type])
                 else:
                     logger.debug('Rune is not suitable for %s', rune_type)
@@ -107,22 +150,22 @@ class Rune(object):
             # Stars compensation
             if self.stars <= 5:
                 if perc:
-                    self.vpm_efficiency[rune_type] -= self.settings['SUB_WEIGHTS'][main_stat] * \
-                                                      self.settings['STAT_COMP']['PERC'][main_stat] / \
-                                                      self.settings['MAX_VALUE'][main_stat]
+                    self.vpm_efficiency[rune_type] -= self.settings['substat_weights'][main_stat] * \
+                                                      self.settings['stat_compensation']['PERC'][main_stat] / \
+                                                      self.settings['max_value'][main_stat]
                 else:
                     if key == 'SPD':
-                        self.vpm_efficiency[rune_type] -= self.settings['SUB_WEIGHTS'][main_stat] * \
-                                                          self.settings['STAT_COMP']['FLAT'][main_stat] / \
-                                                          self.settings['MAX_VALUE'][main_stat]
+                        self.vpm_efficiency[rune_type] -= self.settings['substat_weights'][main_stat] * \
+                                                          self.settings['stat_compensation']['FLAT'][main_stat] / \
+                                                          self.settings['max_value'][main_stat]
                     else:
-                        self.vpm_efficiency[rune_type] -= self.settings['SUB_WEIGHTS'][main_stat] * \
-                                                          self.settings['STAT_COMP']['FLAT'][main_stat] /\
-                                                          self.settings['AV_BASE_STATS'][main_stat] * 100 / \
-                                                          self.settings['MAX_VALUE'][main_stat]
+                        self.vpm_efficiency[rune_type] -= self.settings['substat_weights'][main_stat] * \
+                                                          self.settings['stat_compensation']['FLAT'][main_stat] /\
+                                                          self.settings['average_base_stats'][main_stat] * 100 / \
+                                                          self.settings['max_value'][main_stat]
             # Level compensation
             if self.level < 12:
-                self.vpm_efficiency[rune_type] += self.settings['LEVEL_COMP'][self.level] / 100
+                self.vpm_efficiency[rune_type] += self.settings['level_compensation'][self.level] / 100
         # for rune_type in self.settings['MONS_TYPES'].keys():
         #     for stat in self.stats.keys():
         #         if stat in self.settings['MONS_TYPES'][rune_type]['SUBS'] \
@@ -139,13 +182,6 @@ class Rune(object):
 
         logger.debug(self.mons_type)
 
-    def simulate_powerup(self):
-        pass
-        # if self.level >=12:
-        #     if self.slot in st.PERC_SLOTS:
-        #         splitted = self.main_stat.split()
-        #         self.stats['MAIN_INC']
-
     def check_to_sell(self, vpm_averages, barion_averages):
         # n_upgrades = int((15 - self.level) / 3)
         # if n_upgrades > 0: n_upgrades -= 1
@@ -157,7 +193,7 @@ class Rune(object):
         # for rune_type in self.settings['MONS_TYPES'].keys():
         #     if self.sums[rune_type] + st.SUB_INCREMENT[slot_type]*n_upgrades > averages[rune_type][slot_type]:
         #         self.sell = False
-        for rune_type in self.settings['MONS_TYPES'].keys():
+        for rune_type in self.settings['monster_types'].keys():
             if self.vpm_efficiency[rune_type] > vpm_averages[rune_type][slot_type]:
                 self.sell['VPM'] = False
             if self.max_efficiency > barion_averages[rune_type][slot_type]:

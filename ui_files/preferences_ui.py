@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui/ui_files/mainwindow.ui'
+# Form implementation generated from reading ui file 'ui_files/preferences.ui'
 #
 # Created by: PyQt5 UI code generator 5.9
 #
@@ -8,16 +8,11 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1024, 600)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
-        MainWindow.setSizePolicy(sizePolicy)
-        MainWindow.setStyleSheet("QWidget#frmLogin,QWidget#frmPopup,QWidget#frmHostInfo,QWidget#frmLogout,QWidget#frmConfig,QWidget#frmData,QWidget#frmDefence,QWidget#frmHost,QWidget#frmMain,QWidget#frmPwd,QWidget#frmSelect,QWidget#frmMessageBox{\n"
+class Ui_preferencesDialog(object):
+    def setupUi(self, preferencesDialog):
+        preferencesDialog.setObjectName("preferencesDialog")
+        preferencesDialog.resize(562, 429)
+        preferencesDialog.setStyleSheet("QWidget#frmLogin,QWidget#frmPopup,QWidget#frmHostInfo,QWidget#frmLogout,QWidget#frmConfig,QWidget#frmData,QWidget#frmDefence,QWidget#frmHost,QWidget#frmMain,QWidget#frmPwd,QWidget#frmSelect,QWidget#frmMessageBox{\n"
 "    border:1px solid #1B89CA;\n"
 "    border-radius:0px;    \n"
 "}\n"
@@ -108,32 +103,11 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "QCheckBox::indicator:unchecked {\n"
-"    image: url(:/qss-icons/resources/qss/img_rc/checkbox_unchecked.png);\n"
+"    image: url(:/qss-icons/resources/qss-icons/checkbox_unchecked.png);\n"
 "}\n"
 "\n"
 "QCheckBox::indicator:checked {\n"
-"    image: url(:/qss-icons/resources/qss/img_rc/checkbox_checked.png); \n"
-"}\n"
-"\n"
-"QSpinBox::up-arrow {\n"
-"    image: url(:/qss-icons/resources/qss/img_rc/sub-line_vertical.png);\n"
-"}\n"
-"\n"
-"QSpinBox::down-arrow {\n"
-"    image: url(:/qss-icons/resources/qss/img_rc/add-line_vertical.png);\n"
-"}\n"
-"\n"
-"QDoubleSpinBox::up-arrow {\n"
-"    image: url(:/qss-icons/resources/qss/img_rc/sub-line_vertical.png);\n"
-"}\n"
-"\n"
-"QDoubleSpinBox::down-arrow {\n"
-"    image: url(:/qss-icons/resources/qss/img_rc/add-line_vertical.png);\n"
-"}\n"
-"\n"
-"QToolBar::separator {\n"
-"    width: 5px;\n"
-"    background: qlineargradient(spread:reflect, x1:0, y1:0, x2:0.489, y2:0, stop:0 rgba(86, 113, 189, 255), stop:1 rgba(92, 172, 238, 255))\n"
+"    image: url(:/qss-icons/resources/qss-icons/checkbox_checked.png); \n"
 "}\n"
 "\n"
 "QRadioButton {\n"
@@ -146,11 +120,11 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "QRadioButton::indicator::unchecked {\n"
-"    image: url(:/qss-icons/resources/qss/img_rc/radio_normal.png); \n"
+"    image: url(:/qss-icons/resources/qss-icons/radio_normal.png); \n"
 "}\n"
 "\n"
 "QRadioButton::indicator::checked {\n"
-"    image: url(:/qss-icons/resources/qss/img_rc/radio_selected.png); \n"
+"    image: url(:/qss-icons/resources/qss-icons/radio_selected.png); \n"
 "}\n"
 "\n"
 "QComboBox,QDateEdit{\n"
@@ -172,7 +146,7 @@ class Ui_MainWindow(object):
 "\n"
 "QComboBox::down-arrow,QDateEdit::down-arrow {\n"
 "    background-color:transparent;\n"
-"    image: url(:/qss-icons/resources/qss/img_rc/array_down.png);\n"
+"    image: url(:/qss-icons/resources/qss-icons/array_down.png);\n"
 "}\n"
 "\n"
 "QMenu {\n"
@@ -297,7 +271,7 @@ class Ui_MainWindow(object):
 "    width:10px;\n"
 "    subcontrol-position: bottom; \n"
 "    subcontrol-origin: margin;\n"
-"    border-image: url(:/qss-icons/resources/qss/img_rc/add-line_vertical.png);\n"
+"    border-image: url(:/qss-icons/resources/qss-icons/add-line_vertical.png);\n"
 "}\n"
 "\n"
 "QScrollBar::add-line:horizontal {\n"
@@ -305,7 +279,7 @@ class Ui_MainWindow(object):
 "    width:10px;\n"
 "    subcontrol-position: right;\n"
 "    subcontrol-origin: margin;\n"
-"    border-image: url(:/qss-icons/resources/qss/img_rc/add-line_horizontal.png);\n"
+"    border-image: url(:/qss-icons/resources/qss-icons/add-line_horizontal.png);\n"
 "}\n"
 "\n"
 "QScrollBar::sub-line:vertical {\n"
@@ -313,7 +287,7 @@ class Ui_MainWindow(object):
 "    width:10px;\n"
 "    subcontrol-position: top; \n"
 "    subcontrol-origin: margin;\n"
-"    border-image: url(:/qss-icons/resources/qss/img_rc/sub-line_vertical.png);\n"
+"    border-image: url(:/qss-icons/resources/qss-icons/sub-line_vertical.png);\n"
 "}\n"
 "\n"
 "QScrollBar::sub-line:horizontal {\n"
@@ -321,7 +295,7 @@ class Ui_MainWindow(object):
 "    width:10px;\n"
 "    subcontrol-position: left;\n"
 "    subcontrol-origin: margin;\n"
-"    border-image: url(:/qss-icons/resources/qss/img_rc/sub-line_horizontal.png);\n"
+"    border-image: url(:/qss-icons/resources/qss-icons/sub-line_horizontal.png);\n"
 "}\n"
 "\n"
 "QScrollBar::add-page:vertical,QScrollBar::sub-page:vertical {\n"
@@ -969,23 +943,13 @@ class Ui_MainWindow(object):
 " } \n"
 "\n"
 "QSpinBox::up-arrow{ \n"
-"    background-color: transparent;\n"
-"    border-left: 3px solid none;\n"
-"    border-right: 3px solid none; \n"
-"    border-bottom: 3px solid #808080; \n"
-"    width: 1px; \n"
-"    height: 1px; \n"
+"    image: url(:/qss-icons/resources/qss-icons/sub-line_vertical.png)\n"
 "}\n"
-"/*\n"
+"\n"
 "QDoubleSpinBox::up-arrow { \n"
-"    background-color: transparent;\n"
-"    border-left: 3px solid none;\n"
-"    border-right: 3px solid none; \n"
-"    border-bottom: 3px solid #808080; \n"
-"    width: 1px; \n"
-"    height: 1px; \n"
+"    image: url(:/qss-icons/resources/qss-icons/sub-line_vertical.png)\n"
 "}\n"
-"*/\n"
+"\n"
 "QDateEdit::up-arrow { \n"
 "    background-color: transparent;\n"
 "    border-left: 3px solid none;\n"
@@ -1166,23 +1130,13 @@ class Ui_MainWindow(object):
 " } \n"
 "\n"
 "QSpinBox::down-arrow  { \n"
-"    /*background-color: transparent;*/\n"
-"    border-left: 3px solid none;\n"
-"    border-right: 3px solid none; \n"
-"    border-top: 3px solid #808080; \n"
-"    width: 1px; \n"
-"    height: 1px; \n"
+"    image: url(:/qss-icons/resources/qss-icons/array_down.png)\n"
 "}\n"
-"/*\n"
+"\n"
 "QDoubleSpinBox::down-arrow { \n"
-"    background-color: transparent;\n"
-"    border-left: 3px solid none;\n"
-"    border-right: 3px solid none; \n"
-"    border-top: 3px solid #808080; \n"
-"    width: 1px; \n"
-"    height: 1px; \n"
+"    image: url(:/qss-icons/resources/qss-icons/array_down.png)\n"
 "}\n"
-"*/\n"
+"\n"
 "QDateEdit::down-arrow { \n"
 "    background-color: transparent;\n"
 "    border-left: 3px solid none;\n"
@@ -1315,381 +1269,277 @@ class Ui_MainWindow(object):
 "QHeaderView::section {\n"
 "    color: black\n"
 "}")
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.gridLayout_2 = QtWidgets.QGridLayout()
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(preferencesDialog)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.tabWidget = QtWidgets.QTabWidget(preferencesDialog)
+        self.tabWidget.setStyleSheet("")
+        self.tabWidget.setObjectName("tabWidget")
+        self.tab = QtWidgets.QWidget()
+        self.tab.setObjectName("tab")
+        self.groupBox_2 = QtWidgets.QGroupBox(self.tab)
+        self.groupBox_2.setGeometry(QtCore.QRect(10, 10, 213, 133))
+        self.groupBox_2.setObjectName("groupBox_2")
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.groupBox_2)
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.gridLayout = QtWidgets.QGridLayout()
-        self.gridLayout.setObjectName("gridLayout")
-        self.slotComboBox = QtWidgets.QComboBox(self.centralwidget)
-        self.slotComboBox.setMinimumSize(QtCore.QSize(89, 28))
-        self.slotComboBox.setMaximumSize(QtCore.QSize(50, 20))
-        self.slotComboBox.setObjectName("slotComboBox")
-        self.slotComboBox.addItem("")
-        self.slotComboBox.addItem("")
-        self.slotComboBox.addItem("")
-        self.slotComboBox.addItem("")
-        self.slotComboBox.addItem("")
-        self.slotComboBox.addItem("")
-        self.slotComboBox.addItem("")
-        self.slotComboBox.addItem("")
-        self.slotComboBox.addItem("")
-        self.gridLayout.addWidget(self.slotComboBox, 0, 3, 1, 1)
-        self.setComboBox = QtWidgets.QComboBox(self.centralwidget)
-        self.setComboBox.setObjectName("setComboBox")
-        self.setComboBox.addItem("")
-        self.setComboBox.addItem("")
-        self.setComboBox.addItem("")
-        self.setComboBox.addItem("")
-        self.setComboBox.addItem("")
-        self.setComboBox.addItem("")
-        self.setComboBox.addItem("")
-        self.setComboBox.addItem("")
-        self.setComboBox.addItem("")
-        self.setComboBox.addItem("")
-        self.setComboBox.addItem("")
-        self.setComboBox.addItem("")
-        self.setComboBox.addItem("")
-        self.setComboBox.addItem("")
-        self.setComboBox.addItem("")
-        self.setComboBox.addItem("")
-        self.setComboBox.addItem("")
-        self.gridLayout.addWidget(self.setComboBox, 0, 1, 1, 1)
-        self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setObjectName("label")
-        self.gridLayout.addWidget(self.label, 0, 0, 1, 1, QtCore.Qt.AlignHCenter)
-        self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setObjectName("label_2")
-        self.gridLayout.addWidget(self.label_2, 0, 2, 1, 1, QtCore.Qt.AlignHCenter)
-        self.label_6 = QtWidgets.QLabel(self.centralwidget)
-        self.label_6.setObjectName("label_6")
-        self.gridLayout.addWidget(self.label_6, 0, 10, 1, 1, QtCore.Qt.AlignHCenter)
-        self.label_9 = QtWidgets.QLabel(self.centralwidget)
-        self.label_9.setObjectName("label_9")
-        self.gridLayout.addWidget(self.label_9, 0, 12, 1, 1, QtCore.Qt.AlignHCenter)
-        self.label_4 = QtWidgets.QLabel(self.centralwidget)
-        self.label_4.setObjectName("label_4")
-        self.gridLayout.addWidget(self.label_4, 0, 6, 1, 1, QtCore.Qt.AlignHCenter)
-        self.label_5 = QtWidgets.QLabel(self.centralwidget)
+        self.formLayout_2 = QtWidgets.QFormLayout()
+        self.formLayout_2.setObjectName("formLayout_2")
+        self.label_5 = QtWidgets.QLabel(self.groupBox_2)
         self.label_5.setObjectName("label_5")
-        self.gridLayout.addWidget(self.label_5, 0, 8, 1, 1, QtCore.Qt.AlignHCenter)
-        self.formLayout = QtWidgets.QFormLayout()
-        self.formLayout.setObjectName("formLayout")
-        self.label_7 = QtWidgets.QLabel(self.centralwidget)
+        self.formLayout_2.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_5)
+        self.label_6 = QtWidgets.QLabel(self.groupBox_2)
+        self.label_6.setObjectName("label_6")
+        self.formLayout_2.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_6)
+        self.label_7 = QtWidgets.QLabel(self.groupBox_2)
         self.label_7.setObjectName("label_7")
-        self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_7)
-        self.label_8 = QtWidgets.QLabel(self.centralwidget)
+        self.formLayout_2.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_7)
+        self.label_8 = QtWidgets.QLabel(self.groupBox_2)
         self.label_8.setObjectName("label_8")
-        self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_8)
-        self.minLevelComboBox = QtWidgets.QComboBox(self.centralwidget)
-        self.minLevelComboBox.setMinimumSize(QtCore.QSize(89, 28))
-        self.minLevelComboBox.setMaximumSize(QtCore.QSize(40, 16777215))
-        self.minLevelComboBox.setObjectName("minLevelComboBox")
-        self.minLevelComboBox.addItem("")
-        self.minLevelComboBox.addItem("")
-        self.minLevelComboBox.addItem("")
-        self.minLevelComboBox.addItem("")
-        self.minLevelComboBox.addItem("")
-        self.minLevelComboBox.addItem("")
-        self.minLevelComboBox.addItem("")
-        self.minLevelComboBox.addItem("")
-        self.minLevelComboBox.addItem("")
-        self.minLevelComboBox.addItem("")
-        self.minLevelComboBox.addItem("")
-        self.minLevelComboBox.addItem("")
-        self.minLevelComboBox.addItem("")
-        self.minLevelComboBox.addItem("")
-        self.minLevelComboBox.addItem("")
-        self.minLevelComboBox.addItem("")
-        self.formLayout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.minLevelComboBox)
-        self.maxLevelComboBox = QtWidgets.QComboBox(self.centralwidget)
-        self.maxLevelComboBox.setMinimumSize(QtCore.QSize(89, 28))
-        self.maxLevelComboBox.setMaximumSize(QtCore.QSize(40, 16777215))
-        self.maxLevelComboBox.setObjectName("maxLevelComboBox")
-        self.maxLevelComboBox.addItem("")
-        self.maxLevelComboBox.addItem("")
-        self.maxLevelComboBox.addItem("")
-        self.maxLevelComboBox.addItem("")
-        self.maxLevelComboBox.addItem("")
-        self.maxLevelComboBox.addItem("")
-        self.maxLevelComboBox.addItem("")
-        self.maxLevelComboBox.addItem("")
-        self.maxLevelComboBox.addItem("")
-        self.maxLevelComboBox.addItem("")
-        self.maxLevelComboBox.addItem("")
-        self.maxLevelComboBox.addItem("")
-        self.maxLevelComboBox.addItem("")
-        self.maxLevelComboBox.addItem("")
-        self.maxLevelComboBox.addItem("")
-        self.maxLevelComboBox.addItem("")
-        self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.maxLevelComboBox)
-        self.gridLayout.addLayout(self.formLayout, 0, 7, 1, 1)
-        self.equippedComboBox = QtWidgets.QComboBox(self.centralwidget)
-        self.equippedComboBox.setMinimumSize(QtCore.QSize(89, 28))
-        self.equippedComboBox.setMaximumSize(QtCore.QSize(40, 16777215))
-        self.equippedComboBox.setObjectName("equippedComboBox")
-        self.equippedComboBox.addItem("")
-        self.equippedComboBox.addItem("")
-        self.equippedComboBox.addItem("")
-        self.gridLayout.addWidget(self.equippedComboBox, 0, 11, 1, 1)
-        self.label_3 = QtWidgets.QLabel(self.centralwidget)
-        self.label_3.setObjectName("label_3")
-        self.gridLayout.addWidget(self.label_3, 0, 4, 1, 1, QtCore.Qt.AlignHCenter)
-        self.mainstatComboBox = QtWidgets.QComboBox(self.centralwidget)
-        self.mainstatComboBox.setMinimumSize(QtCore.QSize(89, 28))
-        self.mainstatComboBox.setMaximumSize(QtCore.QSize(60, 16777215))
-        self.mainstatComboBox.setObjectName("mainstatComboBox")
-        self.mainstatComboBox.addItem("")
-        self.mainstatComboBox.addItem("")
-        self.mainstatComboBox.addItem("")
-        self.mainstatComboBox.addItem("")
-        self.mainstatComboBox.addItem("")
-        self.mainstatComboBox.addItem("")
-        self.mainstatComboBox.addItem("")
-        self.mainstatComboBox.addItem("")
-        self.mainstatComboBox.addItem("")
-        self.gridLayout.addWidget(self.mainstatComboBox, 0, 9, 1, 1)
-        self.starsComboBox = QtWidgets.QComboBox(self.centralwidget)
-        self.starsComboBox.setMinimumSize(QtCore.QSize(89, 28))
-        self.starsComboBox.setMaximumSize(QtCore.QSize(50, 16777215))
-        self.starsComboBox.setObjectName("starsComboBox")
-        self.starsComboBox.addItem("")
-        self.starsComboBox.addItem("")
-        self.starsComboBox.addItem("")
-        self.starsComboBox.addItem("")
-        self.starsComboBox.addItem("")
-        self.starsComboBox.addItem("")
-        self.starsComboBox.addItem("")
-        self.gridLayout.addWidget(self.starsComboBox, 0, 5, 1, 1)
-        self.statusComboBox = QtWidgets.QComboBox(self.centralwidget)
-        self.statusComboBox.setMinimumSize(QtCore.QSize(89, 28))
-        self.statusComboBox.setMaximumSize(QtCore.QSize(50, 16777215))
-        self.statusComboBox.setObjectName("statusComboBox")
-        self.statusComboBox.addItem("")
-        self.statusComboBox.addItem("")
-        self.statusComboBox.addItem("")
-        self.gridLayout.addWidget(self.statusComboBox, 0, 13, 1, 1)
-        self.gridLayout_2.addLayout(self.gridLayout, 0, 0, 1, 1)
-        self.filtersButton = QtWidgets.QPushButton(self.centralwidget)
-        self.filtersButton.setObjectName("filtersButton")
-        self.gridLayout_2.addWidget(self.filtersButton, 1, 0, 1, 1)
-        self.runeTableWidget = QtWidgets.QTableWidget(self.centralwidget)
-        self.runeTableWidget.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
-        self.runeTableWidget.setShowGrid(False)
-        self.runeTableWidget.setCornerButtonEnabled(False)
-        self.runeTableWidget.setObjectName("runeTableWidget")
-        self.runeTableWidget.setColumnCount(11)
-        self.runeTableWidget.setRowCount(0)
-        item = QtWidgets.QTableWidgetItem()
-        self.runeTableWidget.setHorizontalHeaderItem(0, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.runeTableWidget.setHorizontalHeaderItem(1, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.runeTableWidget.setHorizontalHeaderItem(2, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.runeTableWidget.setHorizontalHeaderItem(3, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.runeTableWidget.setHorizontalHeaderItem(4, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.runeTableWidget.setHorizontalHeaderItem(5, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.runeTableWidget.setHorizontalHeaderItem(6, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.runeTableWidget.setHorizontalHeaderItem(7, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.runeTableWidget.setHorizontalHeaderItem(8, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.runeTableWidget.setHorizontalHeaderItem(9, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.runeTableWidget.setHorizontalHeaderItem(10, item)
-        self.runeTableWidget.verticalHeader().setVisible(False)
-        self.gridLayout_2.addWidget(self.runeTableWidget, 2, 0, 1, 1)
-        self.verticalLayout.addLayout(self.gridLayout_2)
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1024, 21))
-        self.menubar.setObjectName("menubar")
-        self.menuFile = QtWidgets.QMenu(self.menubar)
-        self.menuFile.setObjectName("menuFile")
-        self.menuSettings = QtWidgets.QMenu(self.menubar)
-        self.menuSettings.setObjectName("menuSettings")
-        self.menuHelp = QtWidgets.QMenu(self.menubar)
-        self.menuHelp.setObjectName("menuHelp")
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
-        self.toolBar = QtWidgets.QToolBar(MainWindow)
-        self.toolBar.setMovable(False)
-        self.toolBar.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
-        self.toolBar.setObjectName("toolBar")
-        MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBar)
-        self.actionOpen = QtWidgets.QAction(MainWindow)
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/img/resources/icons/document-open-8.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionOpen.setIcon(icon)
-        self.actionOpen.setIconVisibleInMenu(False)
-        self.actionOpen.setObjectName("actionOpen")
-        self.actionQuit = QtWidgets.QAction(MainWindow)
-        self.actionQuit.setIconVisibleInMenu(False)
-        self.actionQuit.setObjectName("actionQuit")
-        self.actionPreferences = QtWidgets.QAction(MainWindow)
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(":/img/resources/icons/system-run-6.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionPreferences.setIcon(icon1)
-        self.actionPreferences.setIconVisibleInMenu(False)
-        self.actionPreferences.setObjectName("actionPreferences")
-        self.actionAbout = QtWidgets.QAction(MainWindow)
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(":/img/resources/icons/help-about-3.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.actionAbout.setIcon(icon2)
-        self.actionAbout.setIconVisibleInMenu(False)
-        self.actionAbout.setObjectName("actionAbout")
-        self.menuFile.addAction(self.actionOpen)
-        self.menuFile.addSeparator()
-        self.menuFile.addAction(self.actionQuit)
-        self.menuSettings.addAction(self.actionPreferences)
-        self.menuHelp.addAction(self.actionAbout)
-        self.menubar.addAction(self.menuFile.menuAction())
-        self.menubar.addAction(self.menuSettings.menuAction())
-        self.menubar.addAction(self.menuHelp.menuAction())
-        self.toolBar.addAction(self.actionOpen)
-        self.toolBar.addAction(self.actionPreferences)
-        self.toolBar.addSeparator()
-        self.toolBar.addAction(self.actionAbout)
+        self.formLayout_2.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.label_8)
+        self.hp_doubleSpinBox = QtWidgets.QDoubleSpinBox(self.groupBox_2)
+        self.hp_doubleSpinBox.setMinimumSize(QtCore.QSize(50, 0))
+        self.hp_doubleSpinBox.setMaximumSize(QtCore.QSize(50, 16777215))
+        self.hp_doubleSpinBox.setSingleStep(0.1)
+        self.hp_doubleSpinBox.setProperty("value", 1.0)
+        self.hp_doubleSpinBox.setObjectName("hp_doubleSpinBox")
+        self.formLayout_2.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.hp_doubleSpinBox)
+        self.def_doubleSpinBox = QtWidgets.QDoubleSpinBox(self.groupBox_2)
+        self.def_doubleSpinBox.setMinimumSize(QtCore.QSize(50, 0))
+        self.def_doubleSpinBox.setMaximumSize(QtCore.QSize(50, 16777215))
+        self.def_doubleSpinBox.setSingleStep(0.1)
+        self.def_doubleSpinBox.setProperty("value", 1.0)
+        self.def_doubleSpinBox.setObjectName("def_doubleSpinBox")
+        self.formLayout_2.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.def_doubleSpinBox)
+        self.atk_doubleSpinBox = QtWidgets.QDoubleSpinBox(self.groupBox_2)
+        self.atk_doubleSpinBox.setMinimumSize(QtCore.QSize(50, 0))
+        self.atk_doubleSpinBox.setMaximumSize(QtCore.QSize(50, 16777215))
+        self.atk_doubleSpinBox.setSingleStep(0.1)
+        self.atk_doubleSpinBox.setProperty("value", 1.0)
+        self.atk_doubleSpinBox.setObjectName("atk_doubleSpinBox")
+        self.formLayout_2.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.atk_doubleSpinBox)
+        self.spd_doubleSpinBox = QtWidgets.QDoubleSpinBox(self.groupBox_2)
+        self.spd_doubleSpinBox.setMinimumSize(QtCore.QSize(50, 0))
+        self.spd_doubleSpinBox.setMaximumSize(QtCore.QSize(50, 50))
+        self.spd_doubleSpinBox.setSingleStep(0.1)
+        self.spd_doubleSpinBox.setProperty("value", 1.2)
+        self.spd_doubleSpinBox.setObjectName("spd_doubleSpinBox")
+        self.formLayout_2.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.spd_doubleSpinBox)
+        self.gridLayout_2.addLayout(self.formLayout_2, 0, 0, 1, 1)
+        self.formLayout_3 = QtWidgets.QFormLayout()
+        self.formLayout_3.setObjectName("formLayout_3")
+        self.label_9 = QtWidgets.QLabel(self.groupBox_2)
+        self.label_9.setObjectName("label_9")
+        self.formLayout_3.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label_9)
+        self.label_10 = QtWidgets.QLabel(self.groupBox_2)
+        self.label_10.setObjectName("label_10")
+        self.formLayout_3.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_10)
+        self.label_11 = QtWidgets.QLabel(self.groupBox_2)
+        self.label_11.setObjectName("label_11")
+        self.formLayout_3.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.label_11)
+        self.label_12 = QtWidgets.QLabel(self.groupBox_2)
+        self.label_12.setObjectName("label_12")
+        self.formLayout_3.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.label_12)
+        self.cr_doubleSpinBox = QtWidgets.QDoubleSpinBox(self.groupBox_2)
+        self.cr_doubleSpinBox.setMinimumSize(QtCore.QSize(50, 0))
+        self.cr_doubleSpinBox.setMaximumSize(QtCore.QSize(50, 16777215))
+        self.cr_doubleSpinBox.setSingleStep(0.1)
+        self.cr_doubleSpinBox.setProperty("value", 1.8)
+        self.cr_doubleSpinBox.setObjectName("cr_doubleSpinBox")
+        self.formLayout_3.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.cr_doubleSpinBox)
+        self.cd_doubleSpinBox = QtWidgets.QDoubleSpinBox(self.groupBox_2)
+        self.cd_doubleSpinBox.setMinimumSize(QtCore.QSize(50, 0))
+        self.cd_doubleSpinBox.setMaximumSize(QtCore.QSize(50, 16777215))
+        self.cd_doubleSpinBox.setSingleStep(0.1)
+        self.cd_doubleSpinBox.setProperty("value", 1.8)
+        self.cd_doubleSpinBox.setObjectName("cd_doubleSpinBox")
+        self.formLayout_3.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.cd_doubleSpinBox)
+        self.acc_doubleSpinBox = QtWidgets.QDoubleSpinBox(self.groupBox_2)
+        self.acc_doubleSpinBox.setMinimumSize(QtCore.QSize(50, 0))
+        self.acc_doubleSpinBox.setMaximumSize(QtCore.QSize(50, 16777215))
+        self.acc_doubleSpinBox.setSingleStep(0.1)
+        self.acc_doubleSpinBox.setProperty("value", 0.6)
+        self.acc_doubleSpinBox.setObjectName("acc_doubleSpinBox")
+        self.formLayout_3.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.acc_doubleSpinBox)
+        self.res_doubleSpinBox = QtWidgets.QDoubleSpinBox(self.groupBox_2)
+        self.res_doubleSpinBox.setMinimumSize(QtCore.QSize(50, 0))
+        self.res_doubleSpinBox.setMaximumSize(QtCore.QSize(50, 16777215))
+        self.res_doubleSpinBox.setSingleStep(0.1)
+        self.res_doubleSpinBox.setProperty("value", 0.6)
+        self.res_doubleSpinBox.setObjectName("res_doubleSpinBox")
+        self.formLayout_3.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.res_doubleSpinBox)
+        self.gridLayout_2.addLayout(self.formLayout_3, 0, 1, 1, 1)
+        self.groupBox_3 = QtWidgets.QGroupBox(self.tab)
+        self.groupBox_3.setGeometry(QtCore.QRect(250, 10, 276, 256))
+        self.groupBox_3.setObjectName("groupBox_3")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.groupBox_3)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.setEdit = QtWidgets.QLineEdit(self.groupBox_3)
+        self.setEdit.setMinimumSize(QtCore.QSize(89, 25))
+        self.setEdit.setMaximumSize(QtCore.QSize(50, 16777215))
+        self.setEdit.setObjectName("setEdit")
+        self.horizontalLayout.addWidget(self.setEdit)
+        self.addsetButton = QtWidgets.QPushButton(self.groupBox_3)
+        self.addsetButton.setMinimumSize(QtCore.QSize(80, 10))
+        self.addsetButton.setMaximumSize(QtCore.QSize(50, 16777215))
+        self.addsetButton.setObjectName("addsetButton")
+        self.horizontalLayout.addWidget(self.addsetButton)
+        self.removesetButton = QtWidgets.QPushButton(self.groupBox_3)
+        self.removesetButton.setMinimumSize(QtCore.QSize(80, 10))
+        self.removesetButton.setMaximumSize(QtCore.QSize(50, 16777215))
+        self.removesetButton.setObjectName("removesetButton")
+        self.horizontalLayout.addWidget(self.removesetButton)
+        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.setslistWidget = QtWidgets.QListWidget(self.groupBox_3)
+        self.setslistWidget.setObjectName("setslistWidget")
+        item = QtWidgets.QListWidgetItem()
+        self.setslistWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.setslistWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.setslistWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.setslistWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.setslistWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.setslistWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.setslistWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.setslistWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.setslistWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.setslistWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.setslistWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.setslistWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.setslistWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.setslistWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.setslistWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.setslistWidget.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.setslistWidget.addItem(item)
+        self.verticalLayout.addWidget(self.setslistWidget)
+        self.tabWidget.addTab(self.tab, "")
+        self.tab_2 = QtWidgets.QWidget()
+        self.tab_2.setObjectName("tab_2")
+        self.gridLayout_5 = QtWidgets.QGridLayout(self.tab_2)
+        self.gridLayout_5.setObjectName("gridLayout_5")
+        self.groupBox = QtWidgets.QGroupBox(self.tab_2)
+        self.groupBox.setObjectName("groupBox")
+        self.gridLayout = QtWidgets.QGridLayout(self.groupBox)
+        self.gridLayout.setObjectName("gridLayout")
+        self.textEdit = QtWidgets.QTextEdit(self.groupBox)
+        self.textEdit.setObjectName("textEdit")
+        self.gridLayout.addWidget(self.textEdit, 1, 0, 1, 1)
+        self.label = QtWidgets.QLabel(self.groupBox)
+        self.label.setObjectName("label")
+        self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.groupBox, 0, 0, 1, 1)
+        self.tabWidget.addTab(self.tab_2, "")
+        self.verticalLayout_2.addWidget(self.tabWidget)
+        self.buttonBox = QtWidgets.QDialogButtonBox(preferencesDialog)
+        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Apply|QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok|QtWidgets.QDialogButtonBox.RestoreDefaults)
+        self.buttonBox.setObjectName("buttonBox")
+        self.verticalLayout_2.addWidget(self.buttonBox)
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.retranslateUi(preferencesDialog)
+        self.tabWidget.setCurrentIndex(0)
+        QtCore.QMetaObject.connectSlotsByName(preferencesDialog)
 
-    def retranslateUi(self, MainWindow):
+    def retranslateUi(self, preferencesDialog):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "SW Rune Manager"))
-        self.slotComboBox.setItemText(0, _translate("MainWindow", "All"))
-        self.slotComboBox.setItemText(1, _translate("MainWindow", "Even"))
-        self.slotComboBox.setItemText(2, _translate("MainWindow", "Odd"))
-        self.slotComboBox.setItemText(3, _translate("MainWindow", "1"))
-        self.slotComboBox.setItemText(4, _translate("MainWindow", "2"))
-        self.slotComboBox.setItemText(5, _translate("MainWindow", "3"))
-        self.slotComboBox.setItemText(6, _translate("MainWindow", "4"))
-        self.slotComboBox.setItemText(7, _translate("MainWindow", "5"))
-        self.slotComboBox.setItemText(8, _translate("MainWindow", "6"))
-        self.setComboBox.setCurrentText(_translate("MainWindow", "All"))
-        self.setComboBox.setItemText(0, _translate("MainWindow", "All"))
-        self.setComboBox.setItemText(1, _translate("MainWindow", "Swift"))
-        self.setComboBox.setItemText(2, _translate("MainWindow", "Fatal"))
-        self.setComboBox.setItemText(3, _translate("MainWindow", "Despair"))
-        self.setComboBox.setItemText(4, _translate("MainWindow", "Violent"))
-        self.setComboBox.setItemText(5, _translate("MainWindow", "Rage"))
-        self.setComboBox.setItemText(6, _translate("MainWindow", "Vampire"))
-        self.setComboBox.setItemText(7, _translate("MainWindow", "Energy"))
-        self.setComboBox.setItemText(8, _translate("MainWindow", "Blade"))
-        self.setComboBox.setItemText(9, _translate("MainWindow", "Focus"))
-        self.setComboBox.setItemText(10, _translate("MainWindow", "Guard"))
-        self.setComboBox.setItemText(11, _translate("MainWindow", "Shield"))
-        self.setComboBox.setItemText(12, _translate("MainWindow", "Revenge"))
-        self.setComboBox.setItemText(13, _translate("MainWindow", "Endure"))
-        self.setComboBox.setItemText(14, _translate("MainWindow", "Will"))
-        self.setComboBox.setItemText(15, _translate("MainWindow", "Nemesis"))
-        self.setComboBox.setItemText(16, _translate("MainWindow", "Destroy"))
-        self.label.setText(_translate("MainWindow", "Set"))
-        self.label_2.setText(_translate("MainWindow", "Slot"))
-        self.label_6.setText(_translate("MainWindow", "Equipped"))
-        self.label_9.setText(_translate("MainWindow", "Status"))
-        self.label_4.setText(_translate("MainWindow", "Level"))
-        self.label_5.setText(_translate("MainWindow", "Main Stat"))
-        self.label_7.setText(_translate("MainWindow", "Min"))
-        self.label_8.setText(_translate("MainWindow", "Max"))
-        self.minLevelComboBox.setItemText(0, _translate("MainWindow", "0"))
-        self.minLevelComboBox.setItemText(1, _translate("MainWindow", "1"))
-        self.minLevelComboBox.setItemText(2, _translate("MainWindow", "2"))
-        self.minLevelComboBox.setItemText(3, _translate("MainWindow", "3"))
-        self.minLevelComboBox.setItemText(4, _translate("MainWindow", "4"))
-        self.minLevelComboBox.setItemText(5, _translate("MainWindow", "5"))
-        self.minLevelComboBox.setItemText(6, _translate("MainWindow", "6"))
-        self.minLevelComboBox.setItemText(7, _translate("MainWindow", "7"))
-        self.minLevelComboBox.setItemText(8, _translate("MainWindow", "8"))
-        self.minLevelComboBox.setItemText(9, _translate("MainWindow", "9"))
-        self.minLevelComboBox.setItemText(10, _translate("MainWindow", "10"))
-        self.minLevelComboBox.setItemText(11, _translate("MainWindow", "11"))
-        self.minLevelComboBox.setItemText(12, _translate("MainWindow", "12"))
-        self.minLevelComboBox.setItemText(13, _translate("MainWindow", "13"))
-        self.minLevelComboBox.setItemText(14, _translate("MainWindow", "14"))
-        self.minLevelComboBox.setItemText(15, _translate("MainWindow", "15"))
-        self.maxLevelComboBox.setCurrentText(_translate("MainWindow", "0"))
-        self.maxLevelComboBox.setItemText(0, _translate("MainWindow", "0"))
-        self.maxLevelComboBox.setItemText(1, _translate("MainWindow", "1"))
-        self.maxLevelComboBox.setItemText(2, _translate("MainWindow", "2"))
-        self.maxLevelComboBox.setItemText(3, _translate("MainWindow", "3"))
-        self.maxLevelComboBox.setItemText(4, _translate("MainWindow", "4"))
-        self.maxLevelComboBox.setItemText(5, _translate("MainWindow", "5"))
-        self.maxLevelComboBox.setItemText(6, _translate("MainWindow", "6"))
-        self.maxLevelComboBox.setItemText(7, _translate("MainWindow", "7"))
-        self.maxLevelComboBox.setItemText(8, _translate("MainWindow", "8"))
-        self.maxLevelComboBox.setItemText(9, _translate("MainWindow", "9"))
-        self.maxLevelComboBox.setItemText(10, _translate("MainWindow", "10"))
-        self.maxLevelComboBox.setItemText(11, _translate("MainWindow", "11"))
-        self.maxLevelComboBox.setItemText(12, _translate("MainWindow", "12"))
-        self.maxLevelComboBox.setItemText(13, _translate("MainWindow", "13"))
-        self.maxLevelComboBox.setItemText(14, _translate("MainWindow", "14"))
-        self.maxLevelComboBox.setItemText(15, _translate("MainWindow", "15"))
-        self.equippedComboBox.setItemText(0, _translate("MainWindow", "All"))
-        self.equippedComboBox.setItemText(1, _translate("MainWindow", "Yes"))
-        self.equippedComboBox.setItemText(2, _translate("MainWindow", "No"))
-        self.label_3.setText(_translate("MainWindow", "Stars"))
-        self.mainstatComboBox.setItemText(0, _translate("MainWindow", "All"))
-        self.mainstatComboBox.setItemText(1, _translate("MainWindow", "SPD"))
-        self.mainstatComboBox.setItemText(2, _translate("MainWindow", "HP"))
-        self.mainstatComboBox.setItemText(3, _translate("MainWindow", "DEF"))
-        self.mainstatComboBox.setItemText(4, _translate("MainWindow", "ATK"))
-        self.mainstatComboBox.setItemText(5, _translate("MainWindow", "CRI Dmg"))
-        self.mainstatComboBox.setItemText(6, _translate("MainWindow", "CRI Rate"))
-        self.mainstatComboBox.setItemText(7, _translate("MainWindow", "Accuracy"))
-        self.mainstatComboBox.setItemText(8, _translate("MainWindow", "Resistance"))
-        self.starsComboBox.setItemText(0, _translate("MainWindow", "All"))
-        self.starsComboBox.setItemText(1, _translate("MainWindow", "1"))
-        self.starsComboBox.setItemText(2, _translate("MainWindow", "2"))
-        self.starsComboBox.setItemText(3, _translate("MainWindow", "3"))
-        self.starsComboBox.setItemText(4, _translate("MainWindow", "4"))
-        self.starsComboBox.setItemText(5, _translate("MainWindow", "5"))
-        self.starsComboBox.setItemText(6, _translate("MainWindow", "6"))
-        self.statusComboBox.setItemText(0, _translate("MainWindow", "All"))
-        self.statusComboBox.setItemText(1, _translate("MainWindow", "Sell"))
-        self.statusComboBox.setItemText(2, _translate("MainWindow", "Keep"))
-        self.filtersButton.setText(_translate("MainWindow", "Apply Filters"))
-        self.runeTableWidget.setSortingEnabled(True)
-        item = self.runeTableWidget.horizontalHeaderItem(0)
-        item.setText(_translate("MainWindow", "Equipped"))
-        item = self.runeTableWidget.horizontalHeaderItem(1)
-        item.setText(_translate("MainWindow", "Slot"))
-        item = self.runeTableWidget.horizontalHeaderItem(2)
-        item.setText(_translate("MainWindow", "Rune Set"))
-        item = self.runeTableWidget.horizontalHeaderItem(3)
-        item.setText(_translate("MainWindow", "Level"))
-        item = self.runeTableWidget.horizontalHeaderItem(4)
-        item.setText(_translate("MainWindow", "Stars"))
-        item = self.runeTableWidget.horizontalHeaderItem(5)
-        item.setText(_translate("MainWindow", "Main Stat"))
-        item = self.runeTableWidget.horizontalHeaderItem(6)
-        item.setText(_translate("MainWindow", "Fixed Stat"))
-        item = self.runeTableWidget.horizontalHeaderItem(7)
-        item.setText(_translate("MainWindow", "Substats"))
-        item = self.runeTableWidget.horizontalHeaderItem(8)
-        item.setText(_translate("MainWindow", "Type"))
-        item = self.runeTableWidget.horizontalHeaderItem(9)
-        item.setText(_translate("MainWindow", "VPM Efficiency"))
-        item = self.runeTableWidget.horizontalHeaderItem(10)
-        item.setText(_translate("MainWindow", "Barion Efficiency"))
-        self.menuFile.setTitle(_translate("MainWindow", "File"))
-        self.menuSettings.setTitle(_translate("MainWindow", "Settings"))
-        self.menuHelp.setTitle(_translate("MainWindow", "Help"))
-        self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
-        self.actionOpen.setText(_translate("MainWindow", "Open"))
-        self.actionOpen.setShortcut(_translate("MainWindow", "Ctrl+O"))
-        self.actionQuit.setText(_translate("MainWindow", "Quit"))
-        self.actionQuit.setShortcut(_translate("MainWindow", "Ctrl+Q"))
-        self.actionPreferences.setText(_translate("MainWindow", "Preferences..."))
-        self.actionAbout.setText(_translate("MainWindow", "About"))
+        preferencesDialog.setWindowTitle(_translate("preferencesDialog", "Prefrences"))
+        self.groupBox_2.setTitle(_translate("preferencesDialog", "Substat Weights"))
+        self.label_5.setText(_translate("preferencesDialog", "HP"))
+        self.label_6.setText(_translate("preferencesDialog", "DEF"))
+        self.label_7.setText(_translate("preferencesDialog", "ATK"))
+        self.label_8.setText(_translate("preferencesDialog", "SPD"))
+        self.hp_doubleSpinBox.setSpecialValueText(_translate("preferencesDialog", "1.00"))
+        self.label_9.setText(_translate("preferencesDialog", "CRI Rate"))
+        self.label_10.setText(_translate("preferencesDialog", "CRI Dmg"))
+        self.label_11.setText(_translate("preferencesDialog", "Accuracy"))
+        self.label_12.setText(_translate("preferencesDialog", "Resistance"))
+        self.groupBox_3.setTitle(_translate("preferencesDialog", "Rune Sets"))
+        self.addsetButton.setText(_translate("preferencesDialog", "Add"))
+        self.removesetButton.setText(_translate("preferencesDialog", "Remove"))
+        __sortingEnabled = self.setslistWidget.isSortingEnabled()
+        self.setslistWidget.setSortingEnabled(False)
+        item = self.setslistWidget.item(0)
+        item.setText(_translate("preferencesDialog", "Energy"))
+        item = self.setslistWidget.item(1)
+        item.setText(_translate("preferencesDialog", "Swift"))
+        item = self.setslistWidget.item(2)
+        item.setText(_translate("preferencesDialog", "Blade"))
+        item = self.setslistWidget.item(3)
+        item.setText(_translate("preferencesDialog", "Fatal"))
+        item = self.setslistWidget.item(4)
+        item.setText(_translate("preferencesDialog", "Despair"))
+        item = self.setslistWidget.item(5)
+        item.setText(_translate("preferencesDialog", "Violent"))
+        item = self.setslistWidget.item(6)
+        item.setText(_translate("preferencesDialog", "Focus"))
+        item = self.setslistWidget.item(7)
+        item.setText(_translate("preferencesDialog", "Guard"))
+        item = self.setslistWidget.item(8)
+        item.setText(_translate("preferencesDialog", "Endure"))
+        item = self.setslistWidget.item(9)
+        item.setText(_translate("preferencesDialog", "Shield"))
+        item = self.setslistWidget.item(10)
+        item.setText(_translate("preferencesDialog", "Revenge"))
+        item = self.setslistWidget.item(11)
+        item.setText(_translate("preferencesDialog", "Rage"))
+        item = self.setslistWidget.item(12)
+        item.setText(_translate("preferencesDialog", "Will"))
+        item = self.setslistWidget.item(13)
+        item.setText(_translate("preferencesDialog", "Nemesis"))
+        item = self.setslistWidget.item(14)
+        item.setText(_translate("preferencesDialog", "Vampire"))
+        item = self.setslistWidget.item(15)
+        item.setText(_translate("preferencesDialog", "Destroy"))
+        item = self.setslistWidget.item(16)
+        item.setText(_translate("preferencesDialog", "???"))
+        self.setslistWidget.setSortingEnabled(__sortingEnabled)
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("preferencesDialog", "General"))
+        self.groupBox.setTitle(_translate("preferencesDialog", "Monster Types"))
+        self.textEdit.setHtml(_translate("preferencesDialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\">{\'TNK\': {    \'SETS\' : [\'Energy\', \'Guard\', \'Endure\', \'Shield\', \'Revenge\', \'Will\', \'Nemesis\', \'???\'],</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\">    \'SUBS\' : [\'HP\', \'DEF\', \'RES\']},</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\"> \'PDD\': {        \'SETS\' : [\'Fatal\', \'Rage\', \'Blade\', \'Will\', \'Nemesis\', \'Vampire\', \'Destroy\', \'???\'],</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\">    \'SUBS\' : [\'ATK\', \'CR\', \'CD\']},</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\"> \'VDD\': {        \'SETS\' : [\'Violent\', \'Blade\', \'Will\', \'Nemesis\', \'Vampire\', \'Destroy\', \'???\'],</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\">     \'SUBS\' : [\'ATK\', \'CR\', \'CD\']},</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\"> \'SDD\': {        \'SETS\' : [\'Violent\', \'Fatal\', \'Rage\', \'Will\', \'Blade\', \'Will\', \'Nemesis\', \'Vampire\',\'Destroy\', \'???\'],</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\">    \'SUBS\' : [\'ATK\', \'CR\', \'CD\', \'SPD\']},</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\"> \'ADD\': {        \'SETS\' : [\'Violent\', \'Blade\', \'Will\', \'Nemesis\', \'Vampire\', \'Destroy\', \'Revenge\', \'Focus\', \'???\'],</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\">    \'SUBS\' : [\'ATK\', \'CR\', \'CD\', \'ACC\']},</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\"> \'RDD\': {        \'SETS\' : [\'Violent\', \'Fatal\', \'Rage\', \'Vampire\', \'Blade\', \'Will\', \'Nemesis\', \'Revenge\', \'Destroy\', \'???\'],</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\">    \'SUBS\' : [\'ATK\', \'CR\', \'CD\', \'RES\']},</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\"> \'HDD\': {        \'SETS\' : [\'Violent\', \'Fatal\', \'Blade\', \'Rage\', \'Will\', \'Nemesis\', \'Vampire\', \'Energy\', \'Destroy\', \'Shield\', \'???\'],</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\">    \'SUBS\' : [\'HP\', \'CR\', \'CD\']},</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\"> \'DDD\': {        \'SETS\': [\'Violent\', \'Fatal\', \'Blade\', \'Rage\', \'Will\', \'Nemesis\', \'Vampire\', \'Guard\', \'Destroy\', \'???\'],</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\">    \'SUBS\': [\'DEF\', \'CR\', \'CD\']},</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\"> \'SSP\': {       \'SETS\': [\'Violent\', \'Swift\', \'Energy\', \'Will\', \'Nemesis\', \'Guard\', \'Shield\', \'???\'],</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\">    \'SUBS\': [\'DEF\', \'HP\', \'SPD\']},</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\"> \'RSP\': {        \'SETS\': [\'Violent\', \'Swift\', \'Energy\', \'Will\', \'Nemesis\', \'Guard\', \'Endure\', \'Shield\', \'???\'],</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\">     \'SUBS\': [\'DEF\', \'HP\', \'SPD\', \'RES\']},</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\"> \'SDM\': {        \'SETS\': [\'Swift\', \'Energy\', \'Will\', \'Nemesis\', \'Guard\', \'Shield\', \'Endure\', \'Blade\', \'???\'],</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\">    \'SUBS\': [\'SPD\']},</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\"> \'CCT\': {        \'SETS\': [\'Despair\', \'Energy\', \'Will\', \'Nemesis\', \'Guard\', \'Shield\', \'Endure\', \'???\'],</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\">    \'SUBS\': [\'DEF\', \'HP\', \'SPD\', \'ACC\']},</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\"> \'BMB\': {        \'SETS\': [\'Fatal\', \'Violent\', \'Energy\', \'Will\', \'Nemesis\', \'Guard\', \'Shield\', \'Endure\', \'???\'],</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\">    \'SUBS\': [\'ATK\', \'SPD\', \'ACC\']}}</span></p></body></html>"))
+        self.label.setText(_translate("preferencesDialog", "Usage: JSON style of the type \'MONS_TYPE\': {\'SETS\': [list of sets], \'SUBS\': [list of subs]"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("preferencesDialog", "Advanced"))
 
-import resources_rc
+import ui_files.resources_rc
