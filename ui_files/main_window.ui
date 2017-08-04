@@ -1902,6 +1902,11 @@ QHeaderView::section {
             <string>Keep</string>
            </property>
           </item>
+          <item>
+           <property name="text">
+            <string>Reappraise</string>
+           </property>
+          </item>
          </widget>
         </item>
        </layout>
@@ -1946,6 +1951,11 @@ QHeaderView::section {
       <column>
        <property name="text">
         <string>Equipped</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Original Quality</string>
        </property>
       </column>
       <column>
@@ -2003,7 +2013,7 @@ QHeaderView::section {
     <item>
      <widget class="QProgressBar" name="progressBar">
       <property name="value">
-       <number>24</number>
+       <number>0</number>
       </property>
      </widget>
     </item>
@@ -2068,7 +2078,7 @@ QHeaderView::section {
      <normaloff>:/icons/resources/icons/document-open-8.png</normaloff>:/icons/resources/icons/document-open-8.png</iconset>
    </property>
    <property name="text">
-    <string>Open csv</string>
+    <string>Open</string>
    </property>
    <property name="iconVisibleInMenu">
     <bool>false</bool>
@@ -2091,7 +2101,7 @@ QHeaderView::section {
     <string>Preferences</string>
    </property>
    <property name="iconVisibleInMenu">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
   </action>
   <action name="actionAbout">

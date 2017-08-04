@@ -111,6 +111,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             filtered_runes = [rune for rune in filtered_runes if rune.status == 'Check']
         elif self.statusComboBox.currentText() == 'Keep':
             filtered_runes = [rune for rune in filtered_runes if rune.status == 'Keep']
+        elif self.statusComboBox.currentText() == 'Reappraise':
+            filtered_runes = [rune for rune in filtered_runes if rune.status == 'Reappraise']
         if self.mainstatComboBox.currentText() == 'All':
             pass
         else:
@@ -173,9 +175,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.runeTableWidget.setRowCount(0)
         self.statusBar().showMessage('Populating list...')
         for rune in rune_list:
-            data = [rune.equipped, rune.slot, rune.rune_set, rune.level, rune.stars, rune.main_stat,
-                    rune.sub_fixed, rune.subs, rune.mons_type,
-                    "{0:.2f}".format(rune.vpm_efficiency[rune.mons_type]), "{0:.2f}".format(rune.barion_efficiency)]
+            data = [rune.equipped, rune.original_quality, rune.slot, rune.rune_set, rune.level, rune.stars, rune.main_stat,
+                    rune.sub_fixed, rune.subs, rune.mons_type, "{0:.2f}".format(rune.vpm_efficiency[rune.mons_type]),
+                    "{0:.2f}".format(rune.barion_efficiency)]
             position = self.runeTableWidget.rowCount()
             self.runeTableWidget.insertRow(position)
             for index, d in enumerate(data):
@@ -186,13 +188,16 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                     item.setBackground(QtGui.QColor(200, 0, 0))
                 elif rune.status == 'Check':
                     item.setBackground(QtGui.QColor(255, 140, 0))
-                else:
+                elif rune.status == 'Keep':
                     item.setBackground(QtGui.QColor(0, 200, 0))
+                elif rune.status == 'Reappraise':
+                    item.setBackground(QtGui.QColor(0, 0, 200))
+
                 self.runeTableWidget.setItem(position, index, item)
         self.runeTableWidget.resizeColumnsToContents()
-        self.statusBar().showMessage('{} runes to sell, {} runes to check, {} to keep'.format(len(self.rune_database.runes_to_sell()),
-                                                                                              len(self.rune_database.runes_to_check()),
-                                                                                              len(self.rune_database.runes_to_keep())))
+        self.statusBar().showMessage('{} runes to sell, {} runes to reappraise, {} runes to check, {} to keep'.format(
+            len(self.rune_database.runes_to_sell()), len(self.rune_database.runes_to_reappraise()),
+            len(self.rune_database.runes_to_check()), len(self.rune_database.runes_to_keep())))
 
     def closeEvent(self, event):
         reply = QtWidgets.QMessageBox.question(self, 'Message',

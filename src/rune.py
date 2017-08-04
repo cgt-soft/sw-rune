@@ -43,6 +43,7 @@ class Rune(object):
         self.mons_type = None
         self.vpm_efficiency = {key: 0.0 for key in self.settings['monster_types'].keys()}
         self.status = 'Sell'
+        self.original_quality = None
 
     def map_json_rune(self, json_rune, monster=None):
         if monster:
@@ -206,8 +207,15 @@ class Rune(object):
         self.sell_final = self.sell['VPM'] or self.sell['Barion']
 
         if self.sell['VPM'] and self.sell['Barion']:
-            self.status = 'Sell'
+            if self.original_quality == 'Legend' and self.stars == 6:
+                self.status = 'Reappraise'
+            else:
+                self.status = 'Sell'
         elif self.sell['VPM'] or self.sell['Barion']:
+            # if self.original_quality == 'Legend' and self.stars == 6:
+            #     self.status = 'Reappraise'
+            # else:
+            #     self.status = 'Check'
             self.status = 'Check'
         else:
             self.status = 'Keep'
