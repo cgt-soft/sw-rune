@@ -42,6 +42,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         if not self.settings.value('Preferences'):
             self.settings.setValue('Preferences', default_settings)
         self.rune_database = RuneDatabase(self.settings.value('Preferences'))
+        self.worker_thread = WorkerThread(rune_database=self.rune_database)
         self.set_connections()
 
 
@@ -52,16 +53,23 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionPreferences.triggered.connect(self.preferrences_action_triggered)
         self.filtersButton.clicked.connect(self.apply_filters_button_clicked)
         self.classifyButton.clicked.connect(self.classify_button_clicked)
+        self.worker_thread.data_signal.connect(self.worker_thread_finished)
+        self.worker_thread.progress_signal.connect(self.update_progress_bar)
+        # self.thread.signal.connect(self.finished)
+
+    def update_progress_bar(self, val):
+        self.progressBar.setValue(val)
+
+    def worker_thread_finished(self, rune_database=None):
+        self.rune_database = rune_database
+        self.populate_list(self.rune_database.rune_objects)
 
     def classify_button_clicked(self):
         self.rune_database.settings = self.settings.value('Preferences')
         self.statusBar().showMessage('Processing {} runes...'.format(len(self.rune_database.rune_objects)))
-        self.rune_database.process_runes()
-        self.statusBar().showMessage('Calculating statistics...')
-        self.rune_database.statistics()
-        self.statusBar().showMessage('Classifying...')
-        self.rune_database.check_to_sell()
-        self.populate_list(self.rune_database.rune_objects)
+        self.worker_thread.start()
+        # self.rune_database = self.worker_thread.rune_database
+        # self.populate_list(self.rune_database.rune_objects)
 
     def apply_filters_button_clicked(self):
         self.statusBar().showMessage('Applying filters...')
@@ -98,9 +106,11 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.statusComboBox.currentText() == 'All':
             pass
         elif self.statusComboBox.currentText() == 'Sell':
-            filtered_runes = [rune for rune in filtered_runes if rune.sell_final]
-        else:
-            filtered_runes = [rune for rune in filtered_runes if not rune.sell_final]
+            filtered_runes = [rune for rune in filtered_runes if rune.status == 'Sell']
+        elif self.statusComboBox.currentText() == 'Check':
+            filtered_runes = [rune for rune in filtered_runes if rune.status == 'Check']
+        elif self.statusComboBox.currentText() == 'Keep':
+            filtered_runes = [rune for rune in filtered_runes if rune.status == 'Keep']
         if self.mainstatComboBox.currentText() == 'All':
             pass
         else:
@@ -152,10 +162,12 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             else:
                 QtWidgets.QMessageBox.warning(self, "Warning!", "Invalid file format {}".format(extension))
                 return
-            self.rune_database.process_runes()
-            self.rune_database.statistics()
-            self.rune_database.check_to_sell()
-            self.populate_list(self.rune_database.rune_objects)
+            print('here', len(self.rune_database.rune_objects))
+            self.worker_thread.rune_database = self.rune_database
+            print('here2', len(self.rune_database.rune_objects))
+            self.worker_thread.start()
+            # self.rune_database = self.worker_thread.rune_database
+            # self.populate_list(self.rune_database.rune_objects)
 
     def populate_list(self, rune_list):
         self.runeTableWidget.setRowCount(0)
@@ -163,23 +175,24 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         for rune in rune_list:
             data = [rune.equipped, rune.slot, rune.rune_set, rune.level, rune.stars, rune.main_stat,
                     rune.sub_fixed, rune.subs, rune.mons_type,
-                    "{0:.2f}".format(100*rune.vpm_efficiency[rune.mons_type]), rune.barion_efficiency]
+                    "{0:.2f}".format(rune.vpm_efficiency[rune.mons_type]), "{0:.2f}".format(rune.barion_efficiency)]
             position = self.runeTableWidget.rowCount()
             self.runeTableWidget.insertRow(position)
             for index, d in enumerate(data):
                 item = QtWidgets.QTableWidgetItem()
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
                 item.setText(str(d))
-                if rune.sell['VPM'] and rune.sell['Barion']:
+                if rune.status == 'Sell':
                     item.setBackground(QtGui.QColor(200, 0, 0))
-                elif rune.sell['VPM'] or rune.sell['Barion']:
+                elif rune.status == 'Check':
                     item.setBackground(QtGui.QColor(255, 140, 0))
                 else:
                     item.setBackground(QtGui.QColor(0, 200, 0))
                 self.runeTableWidget.setItem(position, index, item)
         self.runeTableWidget.resizeColumnsToContents()
-        self.statusBar().showMessage('{} runes to sell, {} to keep'.format(len(self.rune_database.runes_to_sell()),
-                                                                           len(self.rune_database.runes_to_keep())))
+        self.statusBar().showMessage('{} runes to sell, {} runes to check, {} to keep'.format(len(self.rune_database.runes_to_sell()),
+                                                                                              len(self.rune_database.runes_to_check()),
+                                                                                              len(self.rune_database.runes_to_keep())))
 
     def closeEvent(self, event):
         reply = QtWidgets.QMessageBox.question(self, 'Message',
@@ -192,6 +205,30 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             event.ignore()
 
+
+class WorkerThread(QtCore.QThread):
+    data_signal = QtCore.pyqtSignal(object)
+    progress_signal = QtCore.pyqtSignal(int)
+
+    def __init__(self, parent=None, rune_database=object):
+        super(WorkerThread, self).__init__(parent)
+        logging.getLogger(__name__).addHandler(logging.NullHandler())
+        logger = logging.getLogger(__name__)
+        logger.info('Starting app: %s', __app_name__)
+
+        self.rune_database = rune_database
+
+    def run(self):
+        maxval = len(self.rune_database.rune_objects)
+        val = 0
+        for rune in self.rune_database.rune_objects:
+            rune.process()
+            val += 1
+            self.progress_signal.emit(int(val/maxval*100))
+        # self.rune_database.process_runes()
+        self.rune_database.statistics()
+        self.rune_database.check_to_sell()
+        self.data_signal.emit(self.rune_database)
 
 if __name__ == "__main__":
     import logging.config

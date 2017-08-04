@@ -1889,6 +1889,11 @@ QHeaderView::section {
           </item>
           <item>
            <property name="text">
+            <string>Check</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
             <string>Sell</string>
            </property>
           </item>

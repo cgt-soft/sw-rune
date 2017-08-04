@@ -29,12 +29,6 @@ class RuneDatabase(object):
         # logger.debug('__init__:')
         # logger.debug(self.settings)
 
-    def runes_to_sell(self):
-        return [rune for rune in self.rune_objects if rune.sell_final]
-
-    def runes_to_keep(self):
-        return [rune for rune in self.rune_objects if not rune.sell_final]
-
     def read_from_json(self,json_file):
         logger.info('Reading json data from %s', json_file)
         with open(json_file) as f:
@@ -99,3 +93,12 @@ class RuneDatabase(object):
     def check_to_sell(self):
         for rune in self.rune_objects:
             rune.check_to_sell(self.efficiency_averages, self.barion_averages)
+
+    def runes_to_sell(self):
+        return [rune for rune in self.rune_objects if rune.status == 'Sell']
+
+    def runes_to_check(self):
+        return [rune for rune in self.rune_objects if rune.status == 'Check']
+
+    def runes_to_keep(self):
+        return [rune for rune in self.rune_objects if rune.status == 'Keep']

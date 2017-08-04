@@ -38,10 +38,11 @@ class Rune(object):
         self.converted = False
         self.sums = {key: 0 for key in self.settings['monster_types'].keys()}
         self.sell = {'VPM': True, 'Barion': True}
-        # self.sell_final = True
+        self.sell_final = True
         self.n_subs = len([sub for sub in self.subs if sub])
         self.mons_type = None
         self.vpm_efficiency = {key: 0.0 for key in self.settings['monster_types'].keys()}
+        self.status = 'Sell'
 
     def map_json_rune(self, json_rune, monster=None):
         if monster:
@@ -69,19 +70,17 @@ class Rune(object):
             self.n_subs += 1
         for i in range(self.n_subs,4):
             self.subs.append('')
-        # for i in range(0, 4):
-        #     if len(json_rune['sec_eff']) - 1 >= i:
-        #         self.subs.append(mp.get_rune_effect(json_rune['sec_eff'][i]))
-        #     else:
-        #         self.subs.append('')
         # Potentials
         efficiencies = mp.get_rune_efficiency(json_rune)
         self.current_efficiency = float("{0:.2f}".format(efficiencies['current']))
         self.max_efficiency = float("{0:.2f}".format(efficiencies['max']))
         # Barion efficiency
-        self.barion_efficiency = float("{0:.2f}".format(mp.barion_rune_efficiency(json_rune)))
+        self.barion_efficiency = float("{0:.2f}".format(100*mp.barion_rune_efficiency(json_rune)))
         # Original quality (Legend, hero, etc)
         self.original_quality = mp.exports['rune']['quality'][json_rune['rank']]
+        log = [self.equipped, self.rune_set, self.slot, self.stars, self.level, self.main_stat, self.sub_fixed,
+                     self.subs[0], self.subs[1], self.subs[2], self.subs[3], self.barion_efficiency]
+        logger.debug(log)
 
 
     def get_stat(self, stat):
@@ -115,6 +114,11 @@ class Rune(object):
 
     def process(self):
         logger.debug('Processing rune id=%s', self.id)
+        self.stats = {key: {'Value': 0, 'Grinded': False} for key in self.settings['substat_weights'].keys()}
+        self.vpm_efficiency = {key: 0.0 for key in self.settings['monster_types'].keys()}
+        self.mons_type = None
+        self.sell = {'VPM': True, 'Barion': True}
+        self.converted = False
         self.check_converted()
         logger.debug('Converted = %s', self.converted)
         subs_to_check = [self.sub_fixed] + self.subs
@@ -166,6 +170,7 @@ class Rune(object):
             # Level compensation
             if self.level < 12:
                 self.vpm_efficiency[rune_type] += self.settings['level_compensation'][self.level] / 100
+            self.vpm_efficiency[rune_type] = 100*self.vpm_efficiency[rune_type]
         # for rune_type in self.settings['MONS_TYPES'].keys():
         #     for stat in self.stats.keys():
         #         if stat in self.settings['MONS_TYPES'][rune_type]['SUBS'] \
@@ -183,9 +188,8 @@ class Rune(object):
         logger.debug(self.mons_type)
 
     def check_to_sell(self, vpm_averages, barion_averages):
-        # n_upgrades = int((15 - self.level) / 3)
-        # if n_upgrades > 0: n_upgrades -= 1
-        # logger.debug('n_upgrades %s, level %s', n_upgrades, self.level)
+        self.sell = {'VPM': True, 'Barion': True}
+        self.sell_final = True
         if self.slot in st.PERC_SLOTS:
             slot_type = 'PERC'
         else:
@@ -196,7 +200,14 @@ class Rune(object):
         for rune_type in self.settings['monster_types'].keys():
             if self.vpm_efficiency[rune_type] > vpm_averages[rune_type][slot_type]:
                 self.sell['VPM'] = False
-            if self.max_efficiency > barion_averages[rune_type][slot_type]:
+            if self.barion_efficiency > barion_averages[rune_type][slot_type]:
                 self.sell['Barion'] = False
 
         self.sell_final = self.sell['VPM'] or self.sell['Barion']
+
+        if self.sell['VPM'] and self.sell['Barion']:
+            self.status = 'Sell'
+        elif self.sell['VPM'] or self.sell['Barion']:
+            self.status = 'Check'
+        else:
+            self.status = 'Keep'
