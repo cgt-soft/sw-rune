@@ -105,3 +105,6 @@ class RuneDatabase(object):
 
     def runes_to_reappraise(self):
         return [rune for rune in self.rune_objects if rune.status == 'Reappraise']
+
+    def runes_to_power_up(self):
+        return [rune for rune in self.rune_objects if rune.status == 'Power Up']

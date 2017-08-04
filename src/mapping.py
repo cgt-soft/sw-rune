@@ -1,6 +1,8 @@
 import math
 __author__ = 'CGT'
 
+
+
 exports = {
   'monster': {
     'attributes': {
@@ -803,12 +805,12 @@ exports = {
       "15105": "Devilmon",
       "14314": "Rainbowmon",
 
-      "1000111": "Homunculus - Attack (Water)",
-      "1000112": "Homunculus - Attack (Fire)",
-      "1000113": "Homunculus - Attack (Wind)",
+      "1000111": "H - Atk (Water)",
+      "1000112": "'H - Atk (Fire)",
+      "1000113": "'H - Atk (Wind)",
 
-      "1000214": "Homunculus - Support (Light)",
-      "1000215": "Homunculus - Support (Dark)"
+      "1000214": "'H - Sup (Light)",
+      "1000215": "'H - Sup (Dark)"
     }
   },
   'rune': {

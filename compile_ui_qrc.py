@@ -1,5 +1,5 @@
-__author__ = 'CGT'
 import os
+__author__ = 'CGT'
 
 # ui_files = ['about.ui', 'mainwindow.ui', 'mainwindow_toolbar.ui', 'preferences.ui']
 os.system('C:\Python35\Scripts\pyuic5.exe ui_files/main_window.ui -o ui_files/main_window_ui.py')

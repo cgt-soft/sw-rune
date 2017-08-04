@@ -208,14 +208,22 @@ class Rune(object):
 
         if self.sell['VPM'] and self.sell['Barion']:
             if self.original_quality == 'Legend' and self.stars == 6:
-                self.status = 'Reappraise'
+                if self.level >= 12:
+                    self.status = 'Reappraise'
+                else:
+                    self.status = 'Power Up'
             else:
                 self.status = 'Sell'
         elif self.sell['VPM'] or self.sell['Barion']:
-            # if self.original_quality == 'Legend' and self.stars == 6:
-            #     self.status = 'Reappraise'
-            # else:
-            #     self.status = 'Check'
-            self.status = 'Check'
+            if self.level < 12:
+                self.status = 'Power Up'
+            elif self.original_quality == 'Legend' and self.stars == 6:
+                self.status = 'Reappraise'
+            else:
+                self.status = 'Check'
+            # self.status = 'Check'
         else:
-            self.status = 'Keep'
+            if self.level < 12:
+                self.status = 'Power Up'
+            else:
+                self.status = 'Keep'

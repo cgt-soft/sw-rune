@@ -22,6 +22,13 @@ def my_exception_hook(exctype, value, traceback):
 # Set the exception hook to our wrapping function
 sys.excepthook = my_exception_hook
 
+colors = {'Sell': QtGui.QColor(255, 122, 122),
+          'Keep': QtGui.QColor(130, 244, 107),
+          'Power Up': QtGui.QColor(255, 171, 68),
+          'Reappraise': QtGui.QColor(142, 226, 255),
+          'Check': QtGui.QColor(249, 247, 97)
+}
+
 # Make directory in %APPDATA%
 appdata_path = os.path.join(os.environ['APPDATA'], __app_name__)
 print(appdata_path)
@@ -38,6 +45,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         logger.info('Starting app: %s', __app_name__)
 
         self.setupUi(self)
+        self.setWindowIcon(QtGui.QIcon('swrc-icon.png'))
+        # self.runeTableWidget.
         self.settings = QtCore.QSettings(QtCore.QSettings.IniFormat, QtCore.QSettings.UserScope, __app_name__, __app_name__)
         if not self.settings.value('Preferences'):
             self.settings.setValue('Preferences', default_settings)
@@ -113,6 +122,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             filtered_runes = [rune for rune in filtered_runes if rune.status == 'Keep']
         elif self.statusComboBox.currentText() == 'Reappraise':
             filtered_runes = [rune for rune in filtered_runes if rune.status == 'Reappraise']
+        elif self.statusComboBox.currentText() == 'Power Up':
+            filtered_runes = [rune for rune in filtered_runes if rune.status == 'Power Up']
         if self.mainstatComboBox.currentText() == 'All':
             pass
         else:
@@ -173,31 +184,43 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def populate_list(self, rune_list):
         self.runeTableWidget.setRowCount(0)
+        self.runeTableWidget.setSortingEnabled(False)
         self.statusBar().showMessage('Populating list...')
         for rune in rune_list:
+            mons_type = self.settings.value('Preferences')['classes'][rune.mons_type]
             data = [rune.equipped, rune.original_quality, rune.slot, rune.rune_set, rune.level, rune.stars, rune.main_stat,
-                    rune.sub_fixed, rune.subs, rune.mons_type, "{0:.2f}".format(rune.vpm_efficiency[rune.mons_type]),
+                    rune.sub_fixed, rune.subs, mons_type, "{0:.2f}".format(rune.vpm_efficiency[rune.mons_type]),
                     "{0:.2f}".format(rune.barion_efficiency)]
             position = self.runeTableWidget.rowCount()
             self.runeTableWidget.insertRow(position)
             for index, d in enumerate(data):
                 item = QtWidgets.QTableWidgetItem()
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
+                font = QtGui.QFont()
+                font.setBold(True)
+                item.setFont(font)
+                # item.setTextColor(QtGui.QColor(0, 0, 0))
                 item.setText(str(d))
-                if rune.status == 'Sell':
-                    item.setBackground(QtGui.QColor(200, 0, 0))
-                elif rune.status == 'Check':
-                    item.setBackground(QtGui.QColor(255, 140, 0))
-                elif rune.status == 'Keep':
-                    item.setBackground(QtGui.QColor(0, 200, 0))
-                elif rune.status == 'Reappraise':
-                    item.setBackground(QtGui.QColor(0, 0, 200))
+                item.setBackground(colors[rune.status])
+                # if rune.status == 'Sell':
+                #     item.setBackground(QtGui.QColor(223, 5, 5))
+                # elif rune.status == 'Check':
+                #     item.setBackground(QtGui.QColor(255, 237, 39))
+                # elif rune.status == 'Keep':
+                #     item.setBackground(QtGui.QColor(71, 225, 0))
+                # elif rune.status == 'Reappraise':
+                #     item.setBackground(QtGui.QColor(55, 229, 255))
+                # elif rune.status == 'Power Up':
+                #     item.setBackground(QtGui.QColor(255, 85, 0))
 
                 self.runeTableWidget.setItem(position, index, item)
         self.runeTableWidget.resizeColumnsToContents()
-        self.statusBar().showMessage('{} runes to sell, {} runes to reappraise, {} runes to check, {} to keep'.format(
+        self.runeTableWidget.setSortingEnabled(True)
+        self.statusBar().showMessage(
+            '{} runes to sell, {} runes to reappraise, {} runes to check, {} to power up, {} to keep'.format(
             len(self.rune_database.runes_to_sell()), len(self.rune_database.runes_to_reappraise()),
-            len(self.rune_database.runes_to_check()), len(self.rune_database.runes_to_keep())))
+            len(self.rune_database.runes_to_check()), len(self.rune_database.runes_to_power_up()),
+            len(self.rune_database.runes_to_keep())))
 
     def closeEvent(self, event):
         reply = QtWidgets.QMessageBox.question(self, 'Message',
