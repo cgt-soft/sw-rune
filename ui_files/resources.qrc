@@ -1,6 +1,7 @@
 <RCC>
   <qresource prefix="icons">
     <file>resources/icons/swrc.png</file>
+    <file>resources/icons/cgt-soft_logo.png</file>
     <file>resources/icons/document-new-8.png</file>
     <file>resources/icons/document-open-8.png</file>
     <file>resources/icons/document-save-5.png</file>

@@ -77,7 +77,7 @@ class RuneDatabase(object):
         flat_list = [rune for rune in self.rune_objects if (rune.level >= 12 and rune.slot in [1, 3, 5])]
         # spd_list = [rune for rune in self.rune_objects if (rune.stats['SPD']['Value'] > 0 and rune.level >= 12 and
         #                                                    rune.slot not in [2])]
-        for rune_type in self.settings['monster_types'].keys():
+        for rune_type in self.settings[self.settings['classification']]['monster_types'].keys():
             vpm_av_perc = numpy.median([rune.vpm_efficiency[rune_type] for rune in perc_list if
                                         rune.vpm_efficiency[rune_type] > 0])
             vpm_av_flat = numpy.median([rune.vpm_efficiency[rune_type] for rune in flat_list if

@@ -36,12 +36,11 @@ class Rune(object):
         else:
             self.max_stats = {key: {'MIN': 0, 'MAX': 0} for key in self.settings['substat_weights'].keys()}
         self.converted = False
-        self.sums = {key: 0 for key in self.settings['monster_types'].keys()}
         self.sell = {'VPM': True, 'Barion': True}
         self.sell_final = True
         self.n_subs = len([sub for sub in self.subs if sub])
         self.mons_type = None
-        self.vpm_efficiency = {key: 0.0 for key in self.settings['monster_types'].keys()}
+        self.vpm_efficiency = {key: 0.0 for key in self.settings[self.settings['classification']]['monster_types'].keys()}
         self.status = 'Sell'
         self.original_quality = None
 
@@ -78,7 +77,10 @@ class Rune(object):
         # Barion efficiency
         self.barion_efficiency = float("{0:.2f}".format(100*mp.barion_rune_efficiency(json_rune)))
         # Original quality (Legend, hero, etc)
-        self.original_quality = mp.exports['rune']['quality'][json_rune['rank']]
+        if json_rune['extra'] == 0:
+            self.original_quality = 'Unknown'
+        else:
+            self.original_quality = mp.exports['rune']['quality'][json_rune['extra']]
         log = [self.equipped, self.rune_set, self.slot, self.stars, self.level, self.main_stat, self.sub_fixed,
                      self.subs[0], self.subs[1], self.subs[2], self.subs[3], self.barion_efficiency]
         logger.debug(log)
@@ -116,7 +118,7 @@ class Rune(object):
     def process(self):
         logger.debug('Processing rune id=%s', self.id)
         self.stats = {key: {'Value': 0, 'Grinded': False} for key in self.settings['substat_weights'].keys()}
-        self.vpm_efficiency = {key: 0.0 for key in self.settings['monster_types'].keys()}
+        self.vpm_efficiency = {key: 0.0 for key in self.settings[self.settings['classification']]['monster_types'].keys()}
         self.mons_type = None
         self.sell = {'VPM': True, 'Barion': True}
         self.converted = False
@@ -136,14 +138,14 @@ class Rune(object):
                         self.stats[key]['Value'] += val / self.settings['average_base_stats'][key] * 100
         logger.debug('stats = %s', self.stats)
         main_stat, _, _, perc = self.get_stat(self.main_stat)
-        for rune_type in self.settings['monster_types'].keys():
+        for rune_type in self.settings[self.settings['classification']]['monster_types'].keys():
             # Calculate VPM efficiency
             for stat in self.stats.keys():
                 logger.debug('set: %s, type: %s, stat: %s, main: %s',self.rune_set, rune_type, stat, main_stat)
                 # if stat in self.settings['MONS_TYPES'][rune_type]['SUBS'] and self.rune_set in self.settings['MONS_TYPES'][rune_type]['SETS'] and main_stat in self.settings['MONS_TYPES'][rune_type]['SUBS']:
-                if stat in self.settings['monster_types'][rune_type]['SUBS'] and \
-                                self.rune_set in self.settings['monster_types'][rune_type]['SETS'] and \
-                                ((self.slot in st.PERC_SLOTS and main_stat in self.settings['monster_types'][rune_type]['SUBS']) or
+                if stat in self.settings[self.settings['classification']]['monster_types'][rune_type]['SUBS'] and \
+                                self.rune_set in self.settings[self.settings['classification']]['monster_types'][rune_type]['SETS'] and \
+                                ((self.slot in st.PERC_SLOTS and main_stat in self.settings[self.settings['classification']]['monster_types'][rune_type]['SUBS']) or
                                 self.slot not in st.PERC_SLOTS):
                     self.vpm_efficiency[rune_type] += self.settings['substat_weights'][stat] * \
                                                       self.stats[stat]['Value'] / \
@@ -198,13 +200,13 @@ class Rune(object):
         # for rune_type in self.settings['MONS_TYPES'].keys():
         #     if self.sums[rune_type] + st.SUB_INCREMENT[slot_type]*n_upgrades > averages[rune_type][slot_type]:
         #         self.sell = False
-        for rune_type in self.settings['monster_types'].keys():
+        for rune_type in self.settings[self.settings['classification']]['monster_types'].keys():
             if self.vpm_efficiency[rune_type] > vpm_averages[rune_type][slot_type]:
                 self.sell['VPM'] = False
             if self.barion_efficiency > barion_averages[rune_type][slot_type]:
                 self.sell['Barion'] = False
 
-        self.sell_final = self.sell['VPM'] or self.sell['Barion']
+        # self.sell_final = self.sell['VPM'] or self.sell['Barion']
 
         if self.sell['VPM'] and self.sell['Barion']:
             if self.original_quality == 'Legend' and self.stars == 6:
@@ -215,10 +217,11 @@ class Rune(object):
             else:
                 self.status = 'Sell'
         elif self.sell['VPM'] or self.sell['Barion']:
-            if self.level < 12:
-                self.status = 'Power Up'
-            elif self.original_quality == 'Legend' and self.stars == 6:
-                self.status = 'Reappraise'
+            if self.original_quality == 'Legend' and self.stars == 6:
+                if self.level >= 12:
+                    self.status = 'Reappraise'
+                else:
+                    self.status = 'Power Up'
             else:
                 self.status = 'Check'
             # self.status = 'Check'

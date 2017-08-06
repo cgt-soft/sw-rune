@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>562</width>
-    <height>429</height>
+    <height>423</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1290,8 +1290,8 @@ QHeaderView::section {
         <rect>
          <x>10</x>
          <y>10</y>
-         <width>213</width>
-         <height>133</height>
+         <width>231</width>
+         <height>141</height>
         </rect>
        </property>
        <property name="title">
@@ -1548,8 +1548,8 @@ QHeaderView::section {
         <rect>
          <x>250</x>
          <y>10</y>
-         <width>276</width>
-         <height>256</height>
+         <width>281</width>
+         <height>311</height>
         </rect>
        </property>
        <property name="title">
@@ -1710,15 +1710,56 @@ QHeaderView::section {
       <attribute name="title">
        <string>Advanced</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_5">
-       <item row="0" column="0">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QGroupBox" name="groupBox_4">
+         <property name="title">
+          <string>Classification</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QComboBox" name="classificationComboBox">
+            <item>
+             <property name="text">
+              <string>Simple</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Complex</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Custom</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
           <string>Monster Types</string>
          </property>
          <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Usage: JSON style of the type 'MONS_TYPE': {'SETS': [list of sets], 'SUBS': [list of subs]</string>
+            </property>
+           </widget>
+          </item>
           <item row="1" column="0">
            <widget class="QTextEdit" name="textEdit">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
             <property name="html">
              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -1750,13 +1791,6 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; background-color:#ffffff;&quot;&gt;	'SUBS': ['DEF', 'HP', 'SPD', 'ACC']},&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; background-color:#ffffff;&quot;&gt; 'BMB': {   	 'SETS': ['Fatal', 'Violent', 'Energy', 'Will', 'Nemesis', 'Guard', 'Shield', 'Endure', '???'],&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; background-color:#ffffff;&quot;&gt;	'SUBS': ['ATK', 'SPD', 'ACC']}}&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Usage: JSON style of the type 'MONS_TYPE': {'SETS': [list of sets], 'SUBS': [list of subs]</string>
             </property>
            </widget>
           </item>

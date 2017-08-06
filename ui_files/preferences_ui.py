@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_preferencesDialog(object):
     def setupUi(self, preferencesDialog):
         preferencesDialog.setObjectName("preferencesDialog")
-        preferencesDialog.resize(562, 429)
+        preferencesDialog.resize(562, 423)
         preferencesDialog.setStyleSheet("QWidget#frmLogin,QWidget#frmPopup,QWidget#frmHostInfo,QWidget#frmLogout,QWidget#frmConfig,QWidget#frmData,QWidget#frmDefence,QWidget#frmHost,QWidget#frmMain,QWidget#frmPwd,QWidget#frmSelect,QWidget#frmMessageBox{\n"
 "    border:1px solid #1B89CA;\n"
 "    border-radius:0px;    \n"
@@ -1277,7 +1277,7 @@ class Ui_preferencesDialog(object):
         self.tab = QtWidgets.QWidget()
         self.tab.setObjectName("tab")
         self.groupBox_2 = QtWidgets.QGroupBox(self.tab)
-        self.groupBox_2.setGeometry(QtCore.QRect(10, 10, 213, 133))
+        self.groupBox_2.setGeometry(QtCore.QRect(10, 10, 231, 141))
         self.groupBox_2.setObjectName("groupBox_2")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.groupBox_2)
         self.gridLayout_2.setObjectName("gridLayout_2")
@@ -1368,7 +1368,7 @@ class Ui_preferencesDialog(object):
         self.formLayout_3.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.res_doubleSpinBox)
         self.gridLayout_2.addLayout(self.formLayout_3, 0, 1, 1, 1)
         self.groupBox_3 = QtWidgets.QGroupBox(self.tab)
-        self.groupBox_3.setGeometry(QtCore.QRect(250, 10, 276, 256))
+        self.groupBox_3.setGeometry(QtCore.QRect(250, 10, 281, 311))
         self.groupBox_3.setObjectName("groupBox_3")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.groupBox_3)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -1430,19 +1430,32 @@ class Ui_preferencesDialog(object):
         self.tabWidget.addTab(self.tab, "")
         self.tab_2 = QtWidgets.QWidget()
         self.tab_2.setObjectName("tab_2")
-        self.gridLayout_5 = QtWidgets.QGridLayout(self.tab_2)
-        self.gridLayout_5.setObjectName("gridLayout_5")
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.tab_2)
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.groupBox_4 = QtWidgets.QGroupBox(self.tab_2)
+        self.groupBox_4.setObjectName("groupBox_4")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.groupBox_4)
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.classificationComboBox = QtWidgets.QComboBox(self.groupBox_4)
+        self.classificationComboBox.setObjectName("classificationComboBox")
+        self.classificationComboBox.addItem("")
+        self.classificationComboBox.addItem("")
+        self.classificationComboBox.addItem("")
+        self.verticalLayout_3.addWidget(self.classificationComboBox)
+        self.verticalLayout_4.addWidget(self.groupBox_4)
         self.groupBox = QtWidgets.QGroupBox(self.tab_2)
         self.groupBox.setObjectName("groupBox")
         self.gridLayout = QtWidgets.QGridLayout(self.groupBox)
         self.gridLayout.setObjectName("gridLayout")
-        self.textEdit = QtWidgets.QTextEdit(self.groupBox)
-        self.textEdit.setObjectName("textEdit")
-        self.gridLayout.addWidget(self.textEdit, 1, 0, 1, 1)
         self.label = QtWidgets.QLabel(self.groupBox)
         self.label.setObjectName("label")
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
-        self.gridLayout_5.addWidget(self.groupBox, 0, 0, 1, 1)
+        self.textEdit = QtWidgets.QTextEdit(self.groupBox)
+        self.textEdit.setEnabled(True)
+        self.textEdit.setReadOnly(True)
+        self.textEdit.setObjectName("textEdit")
+        self.gridLayout.addWidget(self.textEdit, 1, 0, 1, 1)
+        self.verticalLayout_4.addWidget(self.groupBox)
         self.tabWidget.addTab(self.tab_2, "")
         self.verticalLayout_2.addWidget(self.tabWidget)
         self.buttonBox = QtWidgets.QDialogButtonBox(preferencesDialog)
@@ -1508,7 +1521,12 @@ class Ui_preferencesDialog(object):
         item.setText(_translate("preferencesDialog", "???"))
         self.setslistWidget.setSortingEnabled(__sortingEnabled)
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("preferencesDialog", "General"))
+        self.groupBox_4.setTitle(_translate("preferencesDialog", "Classification"))
+        self.classificationComboBox.setItemText(0, _translate("preferencesDialog", "Simple"))
+        self.classificationComboBox.setItemText(1, _translate("preferencesDialog", "Complex"))
+        self.classificationComboBox.setItemText(2, _translate("preferencesDialog", "Custom"))
         self.groupBox.setTitle(_translate("preferencesDialog", "Monster Types"))
+        self.label.setText(_translate("preferencesDialog", "Usage: JSON style of the type \'MONS_TYPE\': {\'SETS\': [list of sets], \'SUBS\': [list of subs]"))
         self.textEdit.setHtml(_translate("preferencesDialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -1539,7 +1557,6 @@ class Ui_preferencesDialog(object):
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\">    \'SUBS\': [\'DEF\', \'HP\', \'SPD\', \'ACC\']},</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\"> \'BMB\': {        \'SETS\': [\'Fatal\', \'Violent\', \'Energy\', \'Will\', \'Nemesis\', \'Guard\', \'Shield\', \'Endure\', \'???\'],</span></p>\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" background-color:#ffffff;\">    \'SUBS\': [\'ATK\', \'SPD\', \'ACC\']}}</span></p></body></html>"))
-        self.label.setText(_translate("preferencesDialog", "Usage: JSON style of the type \'MONS_TYPE\': {\'SETS\': [list of sets], \'SUBS\': [list of subs]"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("preferencesDialog", "Advanced"))
 
 import ui_files.resources_rc

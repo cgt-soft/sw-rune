@@ -41,8 +41,8 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         super(MyApp, self).__init__(parent)
 
         logging.getLogger(__name__).addHandler(logging.NullHandler())
-        logger = logging.getLogger(__name__)
-        logger.info('Starting app: %s', __app_name__)
+        self.logger = logging.getLogger(__name__)
+        self.logger.info('Starting app: %s', __app_name__)
 
         self.setupUi(self)
         self.setWindowIcon(QtGui.QIcon('swrc-icon.png'))
@@ -50,6 +50,16 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.settings = QtCore.QSettings(QtCore.QSettings.IniFormat, QtCore.QSettings.UserScope, __app_name__, __app_name__)
         if not self.settings.value('Preferences'):
             self.settings.setValue('Preferences', default_settings)
+        self.classification = self.settings.value('Preferences')['classification']
+        self.classComboBox.clear()
+        if self.classification == 'Custom':
+            classes = ['All'] + list(self.settings.value('Preferences')[self.classification]['monster_types'].keys())
+        else:
+            classes = ['All'] + list(self.settings.value('Preferences')[self.classification]['classes'].values())
+        # print(classes)
+        self.classComboBox.addItems(classes)
+        self.setComboBox.clear()
+        self.setComboBox.addItems(['All'] + self.settings.value('Preferences')['rune_sets'])
         self.rune_database = RuneDatabase(self.settings.value('Preferences'))
         self.worker_thread = WorkerThread(rune_database=self.rune_database)
         self.set_connections()
@@ -71,10 +81,17 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def worker_thread_finished(self, rune_database=None):
         self.rune_database = rune_database
+        self.classComboBox.clear()
+        if self.classification == 'Custom':
+            classes = ['All'] + list(self.settings.value('Preferences')[self.classification]['monster_types'].keys())
+        else:
+            classes = ['All'] + list(self.settings.value('Preferences')[self.classification]['classes'].values())
+        self.classComboBox.addItems(classes)
         self.populate_list(self.rune_database.rune_objects)
 
     def classify_button_clicked(self):
         self.rune_database.settings = self.settings.value('Preferences')
+        # print(self.rune_database.settings)
         self.statusBar().showMessage('Processing {} runes...'.format(len(self.rune_database.rune_objects)))
         self.worker_thread.start()
         # self.rune_database = self.worker_thread.rune_database
@@ -99,6 +116,9 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             stars_filter = [x for x in range(1, 7)]
         else:
             stars_filter = [int(self.starsComboBox.currentText())]
+        filters = [set_filter, slot_filter, stars_filter]
+        self.logger.debug(filters)
+        self.logger.debug(len(self.rune_database.rune_objects))
         filtered_runes = [
             rune for rune in self.rune_database.rune_objects if (rune.rune_set in set_filter and
                                                                  rune.slot in slot_filter and
@@ -129,6 +149,24 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         else:
             filtered_runes = [rune for rune in filtered_runes if
                               self.mainstatComboBox.currentText() in rune.main_stat]
+        class_filter = self.classComboBox.currentText()
+        if class_filter == 'All':
+            pass
+        else:
+            if self.classification == 'Custom':
+                filtered_runes = [rune for rune in filtered_runes if
+                                  rune.mons_type == class_filter]
+            else:
+                c = self.settings.value('Preferences')[self.classification]['classes']
+                key = list(c.keys())[list(c.values()).index(class_filter)]
+                filtered_runes = [rune for rune in filtered_runes if
+                                  rune.mons_type == key]
+        if self.qualityComboBox.currentText() == 'All':
+            pass
+        else:
+            filtered_runes = [rune for rune in filtered_runes if
+                              rune.original_quality == self.qualityComboBox.currentText()]
+        self.logger.debug(filtered_runes)
         self.populate_list(filtered_runes)
         self.statusBar().showMessage('{} runes filtered'.format(len(filtered_runes)))
 
@@ -140,6 +178,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def apply_preferences(self, preferences):
         self.settings.setValue('Preferences', preferences)
+        self.classification = self.settings.value('Preferences')['classification']
 
     def load_from_pickle(self):
         path = os.path.join(appdata_path,'data.pk')
@@ -162,7 +201,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
     def open_action_triggered(self):
         options = QtWidgets.QFileDialog.DontUseNativeDialog
         file_name, _ = QtWidgets.QFileDialog.getOpenFileName(self, 'Open File',"",
-                                                             "Comma Separated Values file (*.csv);;JSON file (*.json);;All Files (*)",
+                                                             "JSON file (*.json);;Comma Separated Values file (*.csv);;All Files (*)",
                                                              options=options)
         if file_name:
             extension = os.path.splitext(file_name)[1]
@@ -175,9 +214,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
             else:
                 QtWidgets.QMessageBox.warning(self, "Warning!", "Invalid file format {}".format(extension))
                 return
-            print('here', len(self.rune_database.rune_objects))
             self.worker_thread.rune_database = self.rune_database
-            print('here2', len(self.rune_database.rune_objects))
             self.worker_thread.start()
             # self.rune_database = self.worker_thread.rune_database
             # self.populate_list(self.rune_database.rune_objects)
@@ -187,7 +224,10 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.runeTableWidget.setSortingEnabled(False)
         self.statusBar().showMessage('Populating list...')
         for rune in rune_list:
-            mons_type = self.settings.value('Preferences')['classes'][rune.mons_type]
+            if rune.mons_type in self.settings.value('Preferences')[self.classification]['classes']:
+                mons_type = self.settings.value('Preferences')[self.classification]['classes'][rune.mons_type]
+            else:
+                mons_type = rune.mons_type
             data = [rune.equipped, rune.original_quality, rune.slot, rune.rune_set, rune.level, rune.stars, rune.main_stat,
                     rune.sub_fixed, rune.subs, mons_type, "{0:.2f}".format(rune.vpm_efficiency[rune.mons_type]),
                     "{0:.2f}".format(rune.barion_efficiency)]
@@ -202,17 +242,6 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
                 # item.setTextColor(QtGui.QColor(0, 0, 0))
                 item.setText(str(d))
                 item.setBackground(colors[rune.status])
-                # if rune.status == 'Sell':
-                #     item.setBackground(QtGui.QColor(223, 5, 5))
-                # elif rune.status == 'Check':
-                #     item.setBackground(QtGui.QColor(255, 237, 39))
-                # elif rune.status == 'Keep':
-                #     item.setBackground(QtGui.QColor(71, 225, 0))
-                # elif rune.status == 'Reappraise':
-                #     item.setBackground(QtGui.QColor(55, 229, 255))
-                # elif rune.status == 'Power Up':
-                #     item.setBackground(QtGui.QColor(255, 85, 0))
-
                 self.runeTableWidget.setItem(position, index, item)
         self.runeTableWidget.resizeColumnsToContents()
         self.runeTableWidget.setSortingEnabled(True)
@@ -250,6 +279,7 @@ class WorkerThread(QtCore.QThread):
         maxval = len(self.rune_database.rune_objects)
         val = 0
         for rune in self.rune_database.rune_objects:
+            rune.settings = self.rune_database.settings
             rune.process()
             val += 1
             self.progress_signal.emit(int(val/maxval*100))
